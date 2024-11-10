@@ -13,6 +13,58 @@
     <script type="module" src="js/app.js" defer></script>
   </head>
   <body>
-    <h1>Textura</h1>
+    <!-- MAIN -->
+    <main class="main">
+      <div class="container">
+        <h1 class="web-title">Text Analysis Tool</h1>
+
+        <!-- Mode Selection -->
+        <div class="mode-selection">
+          <button id="basicModeButton" class="active">Basic Mode</button>
+          <button id="compareModeButton">Compare Mode</button>
+          <button id="summarizationModeButton">Text Summarization Mode</button>
+          <button id="keywordExtractionModeButton">
+            Keyword Extraction Mode
+          </button>
+        </div>
+
+        <!-- BASIC MODE CONTENT -->
+        <section class="basic-section" id="basicModeContent">
+          <textarea
+            id="basicModeText"
+            rows="10"
+            placeholder="Enter your text here..."
+          ></textarea>
+
+          <div class="results"></div>
+          <div class="basic-button-group">
+            <button id="clearButton">Clear Results</button>
+            <button id="plagiarismCheckButton">Check Plagiarism</button>
+            <button id="saveResultsButton">Save Results</button>
+            <button id="downloadPdfButton">Download as PDF</button>
+          </div>
+        </section>
+
+        <!-- COMPARE MODE CONTENT -->
+        <section class="compare-section" id="compareModeContent">
+          <textarea
+            id="originalText"
+            rows="10"
+            placeholder="Enter text here to compare..."
+          ></textarea>
+
+          <textarea
+            id="compareText"
+            rows="10"
+            placeholder="Enter text here to compare..."
+          ></textarea>
+
+          <div class="button-group">
+            <button id="compareButton">Compare Texts</button>
+          </div>
+          <div id="compareResults"></div>
+        </section>
+      </div>
+    </main>
   </body>
 </html>
