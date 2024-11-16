@@ -3,67 +3,153 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Advanced Text Analysis Tool." />
-    <meta name="keywords" content="text analysis, comparison tool" />
+    <meta
+      name="description"
+      content="Textura: Advanced Text Analysis Tool for comparing, summarizing, and extracting keywords from text."
+    />
+    <meta
+      name="keywords"
+      content="text analysis, text comparison, text summarization, keyword extraction, plagiarism checker"
+    />
     <meta name="author" content="Muhammad Desai" />
-    <title>Textura</title>
+    <title>Textura - Advanced Text Analysis Tool</title>
 
-    <!-- CSS Link -->
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css" />
+
+    <!-- Preload critical assets -->
+    <link rel="preload" href="js/app.js" as="script" />
+    <link rel="preload" href="style.css" as="style" />
+
+    <!-- Third-party libraries -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+      defer
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+      defer
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+
+    <!-- Main JavaScript -->
     <script type="module" src="js/app.js" defer></script>
   </head>
   <body>
-    <!-- MAIN -->
+    <header>
+      <h1 class="visually-hidden">Textura - Text Analysis Tool</h1>
+    </header>
+
+    <!----------------
+    ------- NAV ------
+    ----------------->
+    <nav aria-label="Mode selection">
+      <ul class="mode-selection">
+        <li>
+          <button class="active" id="basicModeButton" aria-pressed="true">
+            Basic Mode
+          </button>
+        </li>
+
+        <li>
+          <button class="active" id="compareModeButton" aria-pressed="false">
+            Compare Mode
+          </button>
+        </li>
+
+        <li>
+          <button
+            class="active"
+            id="summarizationModeButton"
+            aria-pressed="false"
+          >
+            Summarization Mode
+          </button>
+        </li>
+
+        <li>
+          <button
+            class="active"
+            id="keywordExtractionModeButton"
+            aria-pressed="false"
+          >
+            Keyword Extraction
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <!----------------
+    ------- MAIN -----
+    ----------------->
     <main class="main">
       <div class="container">
-        <h1 class="web-title">Text Analysis Tool</h1>
+        <!---------------------
+        ----- BASIC MODE -----
+        ---------------------->
+        <section
+          id="basicModeContent"
+          class="basic-section"
+          aria-labelledby="basicModeHeading"
+        >
+          <h2 class="visually-hidden" id="basicModeHeading">Basic Mode</h2>
 
-        <!-- Mode Selection -->
-        <div class="mode-selection">
-          <button id="basicModeButton" class="active">Basic Mode</button>
-          <button id="compareModeButton">Compare Mode</button>
-          <button id="summarizationModeButton">Text Summarization Mode</button>
-          <button id="keywordExtractionModeButton">
-            Keyword Extraction Mode
-          </button>
-        </div>
-
-        <!-- BASIC MODE CONTENT -->
-        <section class="basic-section" id="basicModeContent">
           <textarea
             id="basicModeText"
             rows="10"
             placeholder="Enter your text here..."
+            aria-label="Text input for basic analysis"
           ></textarea>
 
-          <div class="results"></div>
-          <div class="basic-button-group">
+          <div
+            class="button-group"
+            role="toolbar"
+            aria-label="Text analysis actions"
+          >
             <button id="clearButton">Clear Results</button>
-            <button id="plagiarismCheckButton">Check Plagiarism</button>
+            <button id="plagerismCheckButton">Check Plagerism</button>
             <button id="saveResultsButton">Save Results</button>
-            <button id="downloadPdfButton">Download as PDF</button>
+            <button id="loadResultsButton">Load Results</button>
+            <button class="downloadPdfButton">Download as PDF</button>
           </div>
         </section>
 
-        <!-- COMPARE MODE CONTENT -->
-        <section class="compare-section" id="compareModeContent">
-          <textarea
-            id="originalText"
-            rows="10"
-            placeholder="Enter text here to compare..."
-          ></textarea>
+        <!----------------------
+        ----- COMPARE MODE -----
+        ----------------------->
+        <section
+          id="compareModeContent"
+          class="compare-section"
+          aria-labelledby="compareModeHeading"
+        ></section>
 
-          <textarea
-            id="compareText"
-            rows="10"
-            placeholder="Enter text here to compare..."
-          ></textarea>
+        <!----------------------
+        ----- SUMMARY MODE -----
+        ----------------------->
+        <section
+          id="summarizationModeContent"
+          class="summary-section"
+          aria-labelledby="summaryModeHeading"
+        ></section>
 
-          <div class="button-group">
-            <button id="compareButton">Compare Texts</button>
-          </div>
-          <div id="compareResults"></div>
-        </section>
+        <!----------------------
+        ----- KEYWORD MODE -----
+        ----------------------->
+        <section
+          id="compareModeContent"
+          class="compare-section"
+          aria-labelledby="keywordExtractionModeHeading"
+        ></section>
       </div>
     </main>
   </body>
