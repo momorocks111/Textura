@@ -62,27 +62,19 @@
         </li>
 
         <li>
-          <button class="active" id="compareModeButton" aria-pressed="false">
+          <button id="compareModeButton" aria-pressed="false">
             Compare Mode
           </button>
         </li>
 
         <li>
-          <button
-            class="active"
-            id="summarizationModeButton"
-            aria-pressed="false"
-          >
+          <button id="summarizationModeButton" aria-pressed="false">
             Summarization Mode
           </button>
         </li>
 
         <li>
-          <button
-            class="active"
-            id="keywordExtractionModeButton"
-            aria-pressed="false"
-          >
+          <button id="keywordExtractionModeButton" aria-pressed="false">
             Keyword Extraction
           </button>
         </li>
@@ -131,7 +123,9 @@
           id="compareModeContent"
           class="compare-section"
           aria-labelledby="compareModeHeading"
-        ></section>
+        >
+          Compare
+        </section>
 
         <!----------------------
         ----- SUMMARY MODE -----
@@ -140,16 +134,20 @@
           id="summarizationModeContent"
           class="summary-section"
           aria-labelledby="summaryModeHeading"
-        ></section>
+        >
+          Summary
+        </section>
 
         <!----------------------
         ----- KEYWORD MODE -----
         ----------------------->
         <section
-          id="compareModeContent"
-          class="compare-section"
+          id="keywordExtractionModeContent"
+          class="keyword-section"
           aria-labelledby="keywordExtractionModeHeading"
-        ></section>
+        >
+          Keywords
+        </section>
       </div>
     </main>
   </body>
