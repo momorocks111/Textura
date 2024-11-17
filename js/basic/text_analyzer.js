@@ -10,11 +10,11 @@ export class TextAnalyzer {
       wordCount: this.countWords(),
       characterCount: this.countCharacters(),
       sentenceCount: this.countSentences(),
-      paragraphCount: this.paragraphCount(),
+      paragraphCount: this.countParagraphs(),
       readingTime: this.calculateReadingTime(),
       averageWordLength: this.calculateAverageWordLength(),
       longestWord: this.findLongestWord(),
-      mostFrequentWord: this.findMostFrequentWords(),
+      mostFrequentWords: this.findMostFrequentWords(),
       readabilityScore: this.calculateReadabilityScore(),
       sentimentScore: this.analyzeSentiment(),
       topicAnalysis: this.analyzeTopics(),
@@ -53,6 +53,7 @@ export class TextAnalyzer {
       .trim()
       .split(/\s+/)
       .filter((word) => word.length > 0);
+    const totalLength = words.reduce((sum, word) => sum + word.length, 0);
     return totalLength / words.length;
   }
 

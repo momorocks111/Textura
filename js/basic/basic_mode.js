@@ -1,14 +1,19 @@
 "use strict";
 
+import { TextAnalyzer } from "./text_analyzer.js";
+import { ResultsRenderer } from "../utils/results_renderer.js";
+
 export class BasicMode {
   constructor() {
     this.textArea = document.getElementById("basicModeText");
+    this.resultsContainer = document.getElementById("results");
     this.clearBtn = document.getElementById("clearButton");
     this.plagiarismCheckBtn = document.getElementById("plagerismCheckButton");
     this.saveResultsBtn = document.getElementById("saveResultsButton");
     this.loadResultsBtn = document.getElementById("loadResultsButton");
     this.downloadPdfBtn = document.getElementById("downloadPdfButton");
 
+    this.resultsRenderer = new ResultsRenderer(this.resultsContainer);
     this.debouncedHandleTextInput = this.debounce(
       this.handleTextInput.bind(this),
       300
@@ -56,43 +61,29 @@ export class BasicMode {
   }
 
   async analyzeText(text) {
-    const results = await this.performAnalysis(text);
-    this.updateResults(results);
-  }
-
-  async performAnalysis(text) {
-    // Implement more complex analysis here
-    return {
-      wordCount: text.split(/\s+/).filter((word) => word.length > 0).length,
-    };
-  }
-
-  updateResults(results) {
-    const resultsContainer = document.getElementById("results");
-    resultsContainer.innerHTML = `
-      <h2>Analysis Results</h2>
-      <p>Word Count: ${results.wordCount}</p>
-    `;
+    const analyzer = new TextAnalyzer(text);
+    const results = analyzer.analyze();
+    this.resultsRenderer.render(results);
   }
 
   handleClearResults() {
     this.textArea.value = "";
-    this.analyzeText("");
+    this.resultsContainer.innerHTML = "";
   }
 
   handlePlagiarismCheck() {
-    console.log("Plagiarism clicked");
+    console.log("Plagiarism check functionality to be implemented");
   }
 
   handleSaveResults() {
-    console.log("Save clicked");
+    console.log("Save results functionality to be implemented");
   }
 
   handleLoadResults() {
-    console.log("Load clicked");
+    console.log("Load results functionality to be implemented");
   }
 
   handleDownloadPdf() {
-    console.log("Download clicked");
+    console.log("Download PDF functionality to be implemented");
   }
 }
