@@ -6,6 +6,7 @@ import { ModalManager } from "../utils/modal_manager.js";
 import { PlagiarismChecker } from "./plagiarism_checker.js";
 import { SavedResultsManager } from "./saved_results_manager.js";
 import { AnimationManager } from "./animation_manager.js";
+import { PdfGenerator } from "./pdf_generator.js";
 
 export class BasicMode {
   constructor() {
@@ -27,6 +28,7 @@ export class BasicMode {
     this.plagiarismChecker = new PlagiarismChecker();
     this.savedResultsManager = new SavedResultsManager();
     this.animationManager = new AnimationManager();
+    this.pdfGenerator = new PdfGenerator(this.textArea, this.resultsContainer);
     this.init();
   }
 
@@ -187,7 +189,16 @@ export class BasicMode {
   }
 
   handleDownloadPdf() {
-    console.log("Download PDF functionality to be implemented");
+    const text = this.textArea.value.trim();
+    if (!text) {
+      this.modalManager.showModal(
+        "No Text",
+        "Please enter some text before downloading as PDF."
+      );
+      return;
+    }
+
+    this.showFileNameInputModal();
   }
 
   // Utility Functions
@@ -288,6 +299,48 @@ export class BasicMode {
       this.savedResultsManager.deleteResult(resultId);
       this.handleLoadResults();
     } else if (action === "cancel") {
+      this.modalManager.closeModal();
+    }
+  }
+
+  // PDF Download Functionality
+  showFileNameInputModal() {
+    const content = `
+        <div class="file-name-input">
+            <input type="text" id="pdfFileName" placeholder="Enter file name" value="analysis">
+            <p class="file-extension">.pdf</p>
+        </div>
+        <div class="modal-buttons">
+            <button id="downloadPdf" class="primary-btn">Download</button>
+            <button id="cancelDownload" class="secondary-btn">Cancel</button>
+        </div>
+    `;
+
+    this.modalManager.showModal(
+      "Name Your PDF",
+      content,
+      this.handlePdfModelAction.bind(this)
+    );
+  }
+
+  async handlePdfModelAction(event) {
+    const target = event.target;
+    if (target.id === "downloadPdf") {
+      const fileName =
+        document.getElementById("pdfFileName").value.trim() || "analysis";
+      this.modalManager.showLoadingModal("Generating PDF...");
+      try {
+        const pdf = await this.pdfGenerator.generatePdf(fileName);
+        pdf.save(`${fileName}.pdf`);
+        this.modalManager.showModal("Success", "Your PDF has been downloaded.");
+      } catch (error) {
+        console.error("Error generating PDF:", error);
+        this.modalManager.showModal(
+          "Error",
+          "An error occurred while generating the PDF. Please try again."
+        );
+      }
+    } else if (target.id === "cancelDownload") {
       this.modalManager.closeModal();
     }
   }

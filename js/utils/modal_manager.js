@@ -28,6 +28,21 @@ export class ModalManager {
     document.body.classList.add("no-scroll");
   }
 
+  showLoadingModal(message) {
+    this.removeExistingModal();
+    this.modal = document.createElement("div");
+    this.modal.className = "modal loading-modal";
+    this.modal.innerHTML = `
+      <div class="loading-content">
+        <h2>Loading...</h2>
+        <p>${message}</p>
+        <div class="spinner"></div>
+      </div>
+    `;
+    document.body.appendChild(this.modal);
+    document.body.classList.add("no-scroll");
+  }
+
   closeModal() {
     if (this.modal) {
       this.modal.remove();

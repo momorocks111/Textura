@@ -644,6 +644,60 @@ textarea:focus {
   opacity: 0.8;
 }
 
+/* DOWNLOAD PDF */
+.file-name-input {
+  display: flex;
+  align-items: center;
+  margin-block-end: 20px;
+}
+
+.file-name-input input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 2px solid var(--accent);
+  border-radius: 5px 0 0 px;
+  font-size: var(--font-size-small);
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
+}
+
+.file-name-input .file-extension {
+  padding: 9px;
+  background-color: var(--accent);
+  color: var(--white-clr);
+  border-radius: 0 5px 5px 0;
+  font-size: var(--font-size-small);
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.primary-btn,
+.secondary-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.primary-btn {
+  background-color: var(--accent);
+  color: var(--white-clr);
+}
+
+.secondary-btn {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.primary-btn:hover,
+.secondary-btn:hover {
+  opacity: 0.9;
+}
+
 /*====================================
 ============ COMPARE MODE ============
 ====================================*/
