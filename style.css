@@ -241,6 +241,129 @@ textarea:focus {
 /*====================================
 ============= BASIC MODE =============
 ====================================*/
+/* RESULTS TEXT ANALYSIS */
+#results {
+  background-color: var(--result-bg);
+  border: var(--result-border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-block-start: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.result-item:hover {
+  background-color: var(--changed-bg);
+  transition: background-color 0.3s ease;
+}
+
+#results h2 {
+  color: var(--accent);
+  font-size: var(--font-size-large);
+  margin-block-end: 1rem;
+  text-align: center;
+  border-bottom: 2px solid var(--accent);
+  padding-block-end: 0.5rem;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--result-border);
+}
+
+.result-item:last-child {
+  border-bottom: none;
+}
+
+.result-label {
+  color: var(--accent-light);
+  font-weight: bold;
+  font-size: var(--font-size-small);
+}
+
+.result-value {
+  color: var(--text-primary);
+  font-size: var(--font-size-small);
+}
+
+/* Styling for lists in results */
+#results ul {
+  list-style-type: none;
+  padding-inline-end: 0;
+}
+
+#results li {
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed var(--result-border);
+}
+
+#results li:last-child {
+  border-bottom: none;
+}
+
+/* Styling for specific result types */
+.sentiment-score {
+  font-weight: bold;
+}
+
+.positive-sentiment {
+  color: var(--sentiment-negative);
+}
+
+.negative-sentiment {
+  color: var(--sentiment-negative);
+}
+
+.neutral-sentiment {
+  color: var(--sentiment-neutral);
+}
+
+.long-text-result {
+  max-height: 150px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.long-text-result::-webkit-scrollbar {
+  width: 5px;
+}
+
+.long-text-result::-webkit-scrollbar-thumb {
+  background-color: var(--accent);
+  border-radius: 5px;
+}
+
+.word-frequency-list,
+.topic-analysis-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.word-frequency-item,
+.topic-analysis-item {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 15px;
+  font-size: var(--font-size-small);
+}
+
+/* Animation for results appearance */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 /*====================================
 ============ COMPARE MODE ============
@@ -474,6 +597,29 @@ textarea:focus {
   .theme-modal__option {
     font-size: var(--font-size-medium);
   }
+
+  /* Text Analysis Results */
+  #results {
+    padding: 2rem;
+  }
+
+  #results h2 {
+    font-size: var(--font-size-xl);
+  }
+
+  .result-label,
+  .result-value {
+    font-size: var(--font-size-medium);
+  }
+
+  .result-item {
+    padding: 1rem 0;
+  }
+
+  .word-frequency-item,
+  .topic-analysis-item {
+    font-size: var(--font-size-medium);
+  }
 }
 
 /* Desktop view */
@@ -527,5 +673,15 @@ textarea:focus {
 
   .theme-modal__option {
     padding: 1rem;
+  }
+
+  /* Text Analysis Results */
+  #results {
+    margin-top: 3rem;
+  }
+
+  .result-label,
+  .result-value {
+    font-size: var(--font-size-large);
   }
 }
