@@ -135,7 +135,7 @@ textarea {
 
 .modal__content {
   background-color: var(--bg-primary);
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 10px;
   max-width: 90%;
   width: 400px;
@@ -477,6 +477,140 @@ textarea:focus {
   font-size: 14px;
   color: var(--text-secondary);
 }
+
+/* Saving & Loading CSS */
+.saving-animation,
+.loading-animation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.saving-card,
+.loading-card {
+  background: var(--bg-secondary);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 5px;
+  background: var(--bg-primary);
+  margin-block-start: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  animation: progress 1.5s linear forwards;
+}
+
+@keyframes progress {
+  to {
+    width: 100%;
+  }
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--bg-primary);
+  border-top: 4px solid var(--accent);
+  border-radius: 50%;
+  margin: 10px auto;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.saved-results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.saved-result-card {
+  background: var(--bg-primary);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.saved-result-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.result-date,
+.result-word-count {
+  margin-bottom: 10px;
+  color: var(--text-secondary);
+}
+
+.result-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+  background-color: var(--bg-secondary);
+}
+
+.load-result-btn,
+.delete-result-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.load-result-btn {
+  color: var(--accent);
+}
+
+.load-result-btn:hover {
+  background-color: var(--accent);
+  color: var(--white-clr);
+}
+
+.delete-result-btn {
+  color: var(--sentiment-negative);
+}
+
+.delete-result-btn:hover {
+  background-color: rgba(244, 67, 54, 0.2);
+  color: var(--sentiment-negative);
+}
+
 /*====================================
 ============ COMPARE MODE ============
 ====================================*/
@@ -677,6 +811,27 @@ textarea:focus {
   .word-frequency-item,
   .topic-analysis-item {
     font-size: var(--font-size-medium);
+  }
+
+  /* Loading Results Modal */
+  .saved-result-card {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .result-content {
+    flex-grow: 1;
+  }
+
+  .result-actions {
+    flex-direction: column;
+    padding: 10px;
+    background-color: transparent;
+  }
+
+  .load-result-btn,
+  .delete-result-btn {
+    margin-bottom: 5px;
   }
 }
 
