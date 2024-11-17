@@ -2,6 +2,7 @@
 
 import { TextAnalyzer } from "./text_analyzer.js";
 import { ResultsRenderer } from "../utils/results_renderer.js";
+import { ModalManager } from "../utils/modal_manager.js";
 
 export class BasicMode {
   constructor() {
@@ -19,6 +20,7 @@ export class BasicMode {
       300
     );
 
+    this.modalManager = new ModalManager();
     this.init();
   }
 
@@ -80,8 +82,22 @@ export class BasicMode {
   }
 
   handleClearResults() {
-    this.textArea.value = "";
-    this.resultsContainer.innerHTML = "";
+    if (
+      this.textArea.value.trim() === "" &&
+      this.resultsContainer.innerHTML.trim() === ""
+    ) {
+      this.modalManager.showModal(
+        "No Content to Clear",
+        "There is no text or results to clear."
+      );
+    } else {
+      this.textArea.value = "";
+      this.resultsContainer.innerHTML = "";
+      this.modalManager.showModal(
+        "Cleared",
+        "Text and results have been cleared."
+      );
+    }
   }
 
   handlePlagiarismCheck() {
