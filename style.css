@@ -343,7 +343,7 @@ textarea:focus {
 ============ THEME MODAL =============
 ====================================*/
 .theme-modal {
-  /* display: none; */
+  display: none;
   position: fixed;
   z-index: 1001;
   left: 0;
@@ -365,10 +365,7 @@ textarea:focus {
   max-width: 90%;
   width: 350px;
   position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  /* opacity: 0; */
+  opacity: 0;
   transition: all 0.3s ease;
 }
 
