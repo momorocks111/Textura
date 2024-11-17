@@ -45,8 +45,18 @@ export class ResultsRenderer {
         )}</span>
       </div>
       <div class="result-item">
-        <span class="result-label">Sentiment Score:</span>
-        <span class="result-value">${results.sentimentScore || 0}</span>
+        <span class="result-label">Sentiment Analysis:</span>
+        <div class="sentiment-result">
+          <p>Label: <span class="sentiment-label ${this.getSentimentClass(
+            results.sentimentScore?.label
+          )}">${results.sentimentScore?.label || "N/A"}</span></p>
+          <p>Score: <span class="sentiment-score">${
+            results.sentimentScore?.score.toFixed(2) || "N/A"
+          }</span></p>
+          <p>Magnitude: <span class="sentiment-magnitude">${
+            results.sentimentScore?.magnitude.toFixed(2) || "N/A"
+          }</span></p>
+        </div>
       </div>
       <div class="result-item">
         <span class="result-label">Most Frequent Words:</span>
@@ -75,5 +85,19 @@ export class ResultsRenderer {
         </ul>
       </div>
     `;
+  }
+
+  getSentimentClass(label) {
+    switch (label) {
+      case "Very Positive":
+      case "Positive":
+        return "positive-sentiment";
+      case "Negative":
+      case "Very Negative":
+        return "negative-sentiment";
+      case "Neutral":
+      default:
+        return "neutral-sentiment";
+    }
   }
 }

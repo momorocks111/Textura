@@ -60,10 +60,23 @@ export class BasicMode {
     this.analyzeText(text);
   }
 
+  // basic_mode.js
   async analyzeText(text) {
     const analyzer = new TextAnalyzer(text);
     const results = analyzer.analyze();
-    this.resultsRenderer.render(results);
+
+    // Update how sentiment is displayed
+    const sentimentResult = results.sentimentScore;
+    const sentimentHtml = `
+      <div class="sentiment-result">
+        <p>Sentiment: ${sentimentResult.label}</p>
+        <p>Score: ${sentimentResult.score.toFixed(2)}</p>
+        <p>Magnitude: ${sentimentResult.magnitude.toFixed(2)}</p>
+      </div>
+    `;
+
+    // Include this sentimentHtml in your results rendering
+    this.resultsRenderer.render({ ...results, sentimentHtml });
   }
 
   handleClearResults() {

@@ -1,5 +1,7 @@
 "use strict";
 
+import { sentimentLexicon } from "./sentiment_lexicon.js";
+
 export class TextAnalyzer {
   constructor(text) {
     this.text = text;
@@ -100,29 +102,87 @@ export class TextAnalyzer {
   }
 
   analyzeSentiment() {
-    const positiveWords = new Set([
-      "good",
-      "great",
-      "excellent",
-      "happy",
-      "positive",
-    ]);
-
-    const negativeWords = new Set([
-      "bad",
-      "awful",
-      "terrible",
-      "sad",
-      "negative",
-    ]);
-
     const words = this.text.toLowerCase().match(/\b\w+\b/g);
+
     let score = 0;
-    words.forEach((word) => {
-      if (positiveWords.has(word)) score++;
-      if (negativeWords.has(word)) score--;
+    let sentenceScore = 0;
+    let isNegated = false;
+    let intensifierMultiplier = 1;
+
+    const sentences = this.text
+      .split(/[.!?]+/)
+      .filter((s) => s.trim().length > 0);
+
+    sentences.forEach((sentence) => {
+      const sentenceWords = sentence.toLowerCase().match(/\b\w+\b/g) || [];
+
+      sentenceWords.forEach((word, index) => {
+        if (sentimentLexicon.negators.has(word)) {
+          isNegated = true;
+        } else if (sentimentLexicon.intensifiers.has(word)) {
+          intensifierMultiplier = 2;
+        } else {
+          let wordScore = 0;
+
+          if (sentimentLexicon.positive.has(word)) {
+            wordScore = 1;
+          } else if (sentimentLexicon.negative.has(word)) {
+            wordScore = -1;
+          }
+
+          if (isNegated) {
+            wordScore *= -1;
+            isNegated = false;
+          }
+
+          wordScore *= intensifierMultiplier;
+          intensifierMultiplier = 1;
+
+          // Consider Context
+          const surroundingWords = sentenceWords
+            .slice(Math.max(0, index - 2), index)
+            .concat(sentenceWords.slice(index + 1, index + 3));
+
+          const contextMultiplier =
+            this.calculateContextMultiplier(surroundingWords);
+
+          wordScore *= contextMultiplier;
+
+          sentenceScore += wordScore;
+        }
+      });
+
+      score += sentenceScore;
+      sentenceScore = 0;
     });
-    return score;
+
+    const normalizedScore = score / sentences.length;
+
+    return {
+      score: normalizedScore,
+      label: this.getSentimentLabel(normalizedScore),
+      magnitude: Math.abs(normalizedScore),
+    };
+  }
+
+  calculateContextMultiplier(surroundingWords) {
+    let multiplier = 1;
+    surroundingWords.forEach((word) => {
+      if (sentimentLexicon.intensifiers.has(word)) {
+        multiplier *= 1.5;
+      } else if (sentimentLexicon.negators.has(word)) {
+        multiplier *= -1;
+      }
+    });
+    return multiplier;
+  }
+
+  getSentimentLabel(score) {
+    if (score > 0.5) return "Very Positive";
+    if (score > 0.1) return "Positive";
+    if (score > -0.1) return "Neutral";
+    if (score > -0.5) return "Negative";
+    return "Very Negative";
   }
 
   analyzeTopics() {

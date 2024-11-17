@@ -353,6 +353,35 @@ textarea:focus {
   font-size: var(--font-size-small);
 }
 
+.sentiment-result {
+  background-color: var(--result-bg);
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 5px;
+}
+
+.sentiment-label {
+  font-weight: bold;
+}
+
+.positive-sentiment {
+  color: var(--sentiment-positive);
+}
+
+.negative-sentiment {
+  color: var(--sentiment-negative);
+}
+
+.neutral-sentiment {
+  color: var(--sentiment-neutral);
+}
+
+.sentiment-score,
+.sentiment-magnitude {
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
 /* Animation for results appearance */
 @keyframes fadeIn {
   from {
