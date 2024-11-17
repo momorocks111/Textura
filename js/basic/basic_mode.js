@@ -173,7 +173,6 @@ export class BasicMode {
         "No Saved Results",
         "There are no saved results to load."
       );
-
       return;
     }
 
@@ -183,7 +182,7 @@ export class BasicMode {
     this.modalManager.showModal(
       "Load Saved Results",
       content,
-      this.handleLoadResultSelection.bind(this)
+      this.handleLoadResultAction.bind(this)
     );
   }
 
@@ -216,20 +215,24 @@ export class BasicMode {
   // Loading
   createLoadResultsContent(savedResults) {
     return `
-        <div class="saved-results-grid">
+      <div class="saved-results-grid">
         ${savedResults
           .map(
             (result) => `
-            <div class="saved-result-card" data-id="${result.id}">
-                <div class="result-content">
-                    <p class="result-date">${result.date}</p>
-                    <p class="result-word-count">Words: ${result.results.wordCount}</p>
-                </div>
-                <div class="result-actions">
-                    <button class="load-result-btn"><i class="fas fa-folder-open"></i></button>
-                    <button class="delete-result-btn"><i class="fas fa-trash-alt"></i></button>
-                </div>
+          <div class="saved-result-card" data-id="${result.id}">
+            <div class="result-content">
+              <p class="result-date">${result.date}</p>
+              <p class="result-word-count">Words: ${result.results.wordCount}</p>
             </div>
+            <div class="result-actions">
+              <button class="load-result-btn" data-action="load" data-id="${result.id}">
+                <i class="fas fa-folder-open"></i>
+              </button>
+              <button class="delete-result-btn" data-action="delete" data-id="${result.id}">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </div>
         `
           )
           .join("")}
@@ -237,17 +240,16 @@ export class BasicMode {
     `;
   }
 
-  handleLoadResultSelection(event) {
-    const target = event.target;
-    if (target.classList.contains("load-result-btn")) {
-      const resultId = parseInt(
-        target.closest(".saved-result-card").dataset.id
-      );
+  handleLoadResultAction(event) {
+    const target = event.target.closest("button");
+    if (!target) return;
+
+    const action = target.dataset.action;
+    const resultId = parseInt(target.dataset.id);
+
+    if (action === "load") {
       this.loadSavedResult(resultId);
-    } else if (target.classList.contains("delete-result-btn")) {
-      const resultId = parseInt(
-        target.closest(".saved-result-card").dataset.id
-      );
+    } else if (action === "delete") {
       this.showDeleteConfirmation(resultId);
     }
   }
@@ -266,17 +268,27 @@ export class BasicMode {
       "Confirm Deletion",
       `
         <p>Are you sure you want to delete this saved analysis?</p>
-        <button id="confirmDelete">Yes, delete</button>
-        <button id="cancelDelete">Cancel</button>
+        <div class="confirmation-buttons">
+          <button class="confirm-btn" id="confirmDelete" data-action="confirm" data-id="${resultId}">Yes, delete</button>
+          <button class="cancel-btn" id="cancelDelete" data-action="cancel">Cancel</button>
+        </div>
       `,
-      (event) => {
-        if (event.target.id === "confirmDelete") {
-          this.savedResultsManager.deleteResult(resultId);
-          this.handleLoadResults();
-        } else if (event.target.id === "cancelDelete") {
-          this.modalManager.closeModal();
-        }
-      }
+      this.handleDeleteConfirmation.bind(this)
     );
+  }
+
+  handleDeleteConfirmation(event) {
+    const target = event.target.closest("button");
+    if (!target) return;
+
+    const action = target.dataset.action;
+
+    if (action === "confirm") {
+      const resultId = parseInt(target.dataset.id);
+      this.savedResultsManager.deleteResult(resultId);
+      this.handleLoadResults();
+    } else if (action === "cancel") {
+      this.modalManager.closeModal();
+    }
   }
 }

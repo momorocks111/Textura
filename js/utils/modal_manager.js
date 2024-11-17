@@ -1,47 +1,42 @@
-"use strict";
-
 export class ModalManager {
   constructor() {
     this.modal = null;
   }
 
-  showModal(title, content) {
+  showModal(title, content, onAction = null) {
     this.removeExistingModal();
     this.modal = document.createElement("div");
     this.modal.className = "modal";
     this.modal.innerHTML = `
-        <div class="modal__content">
-          <h2 class="modal__title">${title}</h2>
-          <div class="modal__body">${content}</div>
-          <button class="modal__close-btn">Close</button>
-        </div>
-      `;
+      <div class="modal__content">
+        <h2 class="modal__title">${title}</h2>
+        <div class="modal__body">${content}</div>
+        <button class="modal__close-btn">Close</button>
+      </div>
+    `;
     document.body.appendChild(this.modal);
 
     const closeBtn = this.modal.querySelector(".modal__close-btn");
-    closeBtn.addEventListener("click", () => {
-      this.closeModal();
-    });
+    closeBtn.addEventListener("click", () => this.closeModal());
 
-    // Close modal when clicking outside
-    this.modal.addEventListener("click", (e) => {
-      if (e.target === this.modal) {
-        this.closeModal();
-      }
-    });
+    if (onAction) {
+      this.modal
+        .querySelector(".modal__body")
+        .addEventListener("click", onAction);
+    }
 
     document.body.classList.add("no-scroll");
   }
 
-  removeExistingModal() {
+  closeModal() {
     if (this.modal) {
       this.modal.remove();
       this.modal = null;
+      document.body.classList.remove("no-scroll");
     }
-    document.body.classList.remove("no-scroll");
   }
 
-  closeModal() {
-    this.removeExistingModal();
+  removeExistingModal() {
+    this.closeModal();
   }
 }

@@ -337,6 +337,8 @@ textarea:focus {
 .result-value {
   color: var(--text-primary);
   font-size: var(--font-size-small);
+  width: fit-content;
+  max-width: 100%;
 }
 
 /* Styling for lists in results */
@@ -609,6 +611,37 @@ textarea:focus {
 .delete-result-btn:hover {
   background-color: rgba(244, 67, 54, 0.2);
   color: var(--sentiment-negative);
+}
+
+/* Load Results Delete Btns */
+.confirmation-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.confirm-btn,
+.cancel-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.confirm-btn {
+  background-color: var(--sentiment-negative);
+  color: var(--white-clr);
+}
+
+.cancel-btn {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.confirm-btn:hover,
+.cancel-btn:hover {
+  opacity: 0.8;
 }
 
 /*====================================
