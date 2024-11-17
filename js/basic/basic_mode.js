@@ -3,6 +3,7 @@
 import { TextAnalyzer } from "./text_analyzer.js";
 import { ResultsRenderer } from "../utils/results_renderer.js";
 import { ModalManager } from "../utils/modal_manager.js";
+import { PlagiarismChecker } from "./plagiarism_checker.js";
 
 export class BasicMode {
   constructor() {
@@ -21,6 +22,7 @@ export class BasicMode {
     );
 
     this.modalManager = new ModalManager();
+    this.plagiarismChecker = new PlagiarismChecker();
     this.init();
   }
 
@@ -100,8 +102,34 @@ export class BasicMode {
     }
   }
 
-  handlePlagiarismCheck() {
-    console.log("Plagiarism check functionality to be implemented");
+  async handlePlagiarismCheck() {
+    const text = this.textArea.value.trim();
+    const wordCount = text.split(/\s+/).length;
+    const MIN_WORDS = 35;
+
+    if (!text) {
+      this.modalManager.showModal(
+        "No Text",
+        "Please enter some text before checking for plagiarism"
+      );
+      return;
+    }
+
+    if (wordCount < MIN_WORDS) {
+      this.modalManager.showModal(
+        "Insufficient Text",
+        `Please enter at least ${MIN_WORDS} words for an accurate plagiarism check. Current word count: ${wordCount}`
+      );
+
+      return;
+    }
+
+    this.modalManager.showModal("Checking for plagiarism...", "Please wait...");
+
+    setTimeout(() => {
+      const result = this.plagiarismChecker.checkPlagiarism(text);
+      this.showPlagiarismResult(result);
+    }, 2000);
   }
 
   handleSaveResults() {
@@ -114,5 +142,27 @@ export class BasicMode {
 
   handleDownloadPdf() {
     console.log("Download PDF functionality to be implemented");
+  }
+
+  // Utility Functions
+  showPlagiarismResult(result) {
+    const content = `
+        <div class="plagiarism-result">
+            <div class="score-circle" style="background: conic-gradient(${
+              result.message.color
+            } ${result.overallScore}%, %ddd 0);">
+                <span>${result.overallScore.toFixed(1)}%</span>
+            </div>
+            <p class="result-message" style="color:${result.message.color};">${
+      result.message.text
+    }</p>
+            <div class="score-details">
+                <p>Similarity Score: ${result.similarityScore.toFixed(1)}%</p>
+                <p>Academic Score: ${result.academicScore.toFixed(1)}</p>
+            </div>
+        </div>
+    `;
+
+    this.modalManager.showModal("Plagiarism Check Result", content);
   }
 }
