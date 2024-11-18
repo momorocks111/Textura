@@ -106,7 +106,6 @@ textarea {
   background-color: var(--result-bg);
   border: 1px solid var(--result-border);
   border-radius: 0.5rem;
-  padding: 1rem;
   font-size: var(--font-size-small);
   overflow-wrap: break-word;
 }
@@ -231,7 +230,6 @@ nav {
   background-color: var(--bg-secondary);
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  padding: 1rem;
 }
 
 .web-type {
@@ -655,7 +653,7 @@ textarea:focus {
   flex-grow: 1;
   padding: 10px;
   border: 2px solid var(--accent);
-  border-radius: 5px 0 0 px;
+  border-radius: 5px 0 0 5px;
   font-size: var(--font-size-small);
   color: var(--text-primary);
   background-color: var(--bg-secondary);
@@ -701,6 +699,158 @@ textarea:focus {
 /*====================================
 ============ COMPARE MODE ============
 ====================================*/
+/* COMPARE TEXTS */
+.textura-comparison-results {
+  font-family: "Arial", sans-serif;
+  width: 100%;
+  margin: 0 auto;
+  padding: 10px;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.textura-comparison-results h2 {
+  color: var(--text-primary);
+  text-align: center;
+  font-size: var(--font-size-small);
+  margin-block-end: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.textura-comparison-section {
+  background-color: var(--bg-primary);
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+  transition: transform 0.3s ease;
+}
+
+.textura-comparison-section:hover {
+  transform: translateY(-3px);
+}
+
+.textura-comparison-section h3 {
+  color: var(--accent);
+  font-size: var(--font-size-xsmall);
+  margin-block-end: 10px;
+  border-bottom: 1px solid var(--accent);
+  padding-block-end: 5px;
+}
+
+.textura-similarity-score {
+  font-size: var(--font-size-medium);
+  font-weight: bold;
+  color: var(--text-primary);
+  text-align: center;
+  margin: 15px 0;
+}
+
+.textura-unique-words-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.textura-unique-words-list {
+  width: 100%;
+  margin-block-end: 15px;
+}
+
+.textura-unique-words-list h4 {
+  color: var(--text-secondary);
+  font-size: var(--font-size-xsmall);
+  margin-block-end: 8px;
+}
+
+.textura-unique-words-list ul,
+.textura-common-phrases ul,
+.textura-topic-comparison ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.textura-unique-words-list li,
+.textura-common-phrases li,
+.textura-topic-comparison li {
+  list-style: none;
+  background-color: var(--bg-secondary);
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: var(--font-size-small);
+}
+
+.textura-unique-words-list li:hover,
+.textura-common-phrases li:hover,
+.textura-topic-comparison li:hover {
+  background-color: var(--accent);
+  color: var(--white-clr);
+}
+
+.textura-readability-comparison,
+.textura-sentiment-comparison {
+  text-align: center;
+}
+
+.textura-readability-comparison p,
+.textura-sentiment-comparison p {
+  font-size: var(--font-size-xsmall);
+  margin: 8px 0;
+  color: var(--text-secondary);
+}
+
+.textura-sentiment-label {
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: var(--font-size-small);
+}
+
+.textura-sentiment-positive {
+  background-color: var(--sentiment-positive);
+  color: var(--white-clr);
+}
+
+.textura-sentiment-negative {
+  background-color: var(--sentiment-negative);
+  color: var(--white-clr);
+}
+
+.textura-sentiment-neutral {
+  background-color: var(--sentiment-neutral);
+  color: var(--black-clr);
+}
+
+.textura-topic-comparison li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.textura-topic-name {
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-block-end: 5px;
+}
+
+.textura-topic-scores {
+  display: flex;
+  gap: 8px;
+}
+
+.textura-topic-scores {
+  display: flex;
+  gap: 10px;
+}
+
+.textura-topic-score {
+  padding: 2px 6px;
+  border-radius: 3px;
+  background-color: var(--accent-light);
+  color: var(--white-clr);
+  font-size: var(--font-size-small);
+}
 
 /*====================================
 ============ SUMMARY MODE ============
@@ -920,6 +1070,55 @@ textarea:focus {
   .delete-result-btn {
     margin-bottom: 5px;
   }
+
+  /* Comparison */
+  .textura-comparison-results {
+    max-width: 700px;
+    padding: 20px;
+  }
+
+  .textura-comparison-results h2 {
+    font-size: var(--font-size-medium);
+  }
+
+  .textura-comparison-section h3 {
+    font-size: var(--font-size-small);
+  }
+
+  .textura-similarity-score {
+    font-size: var(--font-size-large);
+  }
+
+  .textura-unique-words-container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .textura-unique-words-list {
+    width: 48%;
+  }
+
+  .textura-unique-words-list li,
+  .textura-common-phrases li,
+  .textura-topic-comparison li {
+    font-size: var(--font-size-xsmall);
+    padding: 10px;
+  }
+
+  .textura-readability-comparison p,
+  .textura-sentiment-comparison p {
+    font-size: var(--font-size-small);
+  }
+
+  .textura-topic-comparison li {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .textura-topic-name {
+    margin-bottom: 0;
+  }
 }
 
 /* Desktop view */
@@ -931,6 +1130,14 @@ textarea:focus {
   .container {
     max-width: 900px;
     margin: 0 auto;
+    padding: 1rem;
+  }
+
+  #results,
+  #compareResults,
+  .summaryResults,
+  .keywordResults {
+    padding: 1rem;
   }
 
   .button-group {
@@ -983,5 +1190,56 @@ textarea:focus {
   .result-label,
   .result-value {
     font-size: var(--font-size-large);
+  }
+
+  /* Compare Results */
+  .textura-comparison-results {
+    max-width: 900px;
+  }
+
+  .textura-comparison-results h2 {
+    font-size: var(--font-size-large);
+    margin-bottom: 30px;
+  }
+
+  .textura-comparison-section {
+    padding: 25px;
+    margin-bottom: 25px;
+  }
+
+  .textura-comparison-section h3 {
+    font-size: var(--font-size-medium);
+    margin-bottom: 20px;
+  }
+
+  .textura-similarity-score {
+    font-size: var(--font-size-large);
+    margin: 25px 0;
+  }
+
+  .textura-unique-words-list h4 {
+    font-size: var(--font-size-small);
+  }
+
+  .textura-unique-words-list li,
+  .textura-common-phrases li,
+  .textura-topic-comparison li {
+    font-size: var(--font-size-small);
+    padding: 12px;
+  }
+
+  .textura-readability-comparison p,
+  .textura-sentiment-comparison p {
+    font-size: var(--font-size-medium);
+  }
+
+  .textura-sentiment-label {
+    font-size: var(--font-size-small);
+    padding: 3px 8px;
+  }
+
+  .textura-topic-score {
+    font-size: var(--font-size-small);
+    padding: 3px 8px;
   }
 }

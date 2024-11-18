@@ -87,6 +87,105 @@ export class ResultsRenderer {
     `;
   }
 
+  renderComparisonResults(comparisonResults) {
+    this.container.innerHTML = `
+      <div class="textura-comparison-results">
+        <h2>Text Comparison Results</h2>
+        
+        <div class="textura-comparison-section">
+          <h3>Similarity Score</h3>
+          <div class="textura-similarity-score">${comparisonResults.similarityScore.toFixed(
+            2
+          )}%</div>
+        </div>
+        
+        <div class="textura-comparison-section">
+          <h3>Unique Words</h3>
+          <div class="textura-unique-words-container">
+            <div class="textura-unique-words-list">
+              <h4>Original Text</h4>
+              <ul>
+                ${comparisonResults.uniqueWords.text1
+                  .slice(0, 10)
+                  .map((word) => `<li>${word}</li>`)
+                  .join("")}
+              </ul>
+            </div>
+            <div class="textura-unique-words-list">
+              <h4>Comparing Text</h4>
+              <ul>
+                ${comparisonResults.uniqueWords.text2
+                  .slice(0, 10)
+                  .map((word) => `<li>${word}</li>`)
+                  .join("")}
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="textura-comparison-section">
+          <h3>Common Phrases</h3>
+          <ul class="textura-common-phrases">
+            ${comparisonResults.commonPhrases
+              .slice(0, 5)
+              .map((phrase) => `<li>${phrase}</li>`)
+              .join("")}
+          </ul>
+        </div>
+        
+        <div class="textura-comparison-section">
+          <h3>Readability Comparison</h3>
+          <div class="textura-readability-comparison">
+            <p>${comparisonResults.readabilityComparison.interpretation}</p>
+            <p>Difference: ${comparisonResults.readabilityComparison.difference.toFixed(
+              2
+            )}</p>
+          </div>
+        </div>
+        
+        <div class="textura-comparison-section">
+          <h3>Sentiment Comparison</h3>
+          <div class="textura-sentiment-comparison">
+            <p>Original Text: <span class="textura-sentiment-label textura-sentiment-${comparisonResults.sentimentComparison.text1.label.toLowerCase()}">${
+      comparisonResults.sentimentComparison.text1.label
+    }</span> (${comparisonResults.sentimentComparison.text1.score.toFixed(
+      2
+    )})</p>
+            <p>Comparing Text: <span class="textura-sentiment-label textura-sentiment-${comparisonResults.sentimentComparison.text2.label.toLowerCase()}">${
+      comparisonResults.sentimentComparison.text2.label
+    }</span> (${comparisonResults.sentimentComparison.text2.score.toFixed(
+      2
+    )})</p>
+          </div>
+        </div>
+        
+        <div class="textura-comparison-section">
+          <h3>Topic Comparison</h3>
+          <ul class="textura-topic-comparison">
+            ${comparisonResults.topicComparison
+              .slice(0, 5)
+              .map(
+                (topic) => `
+              <li>
+                <span class="textura-topic-name">${topic.topic}</span>
+                <div class="textura-topic-scores">
+                  <span class="textura-topic-score">Original: ${topic.text1Score.toFixed(
+                    2
+                  )}</span>
+                  <span class="textura-topic-score">Comparing: ${topic.text2Score.toFixed(
+                    2
+                  )}</span>
+                </div>
+              </li>
+            `
+              )
+              .join("")}
+          </ul>
+        </div>
+      </div>
+    `;
+  }
+
   getSentimentClass(label) {
     switch (label) {
       case "Very Positive":
