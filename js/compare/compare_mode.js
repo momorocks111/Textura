@@ -4,6 +4,7 @@ import { TextAnalyzer } from "../basic/text_analyzer.js";
 import { ResultsRenderer } from "../utils/results_renderer.js";
 import { Comparison } from "./comparison.js";
 import { ModalManager } from "../utils/modal_manager.js";
+import { DiffHighlighter } from "./diff_highlighter.js";
 
 export class CompareMode {
   constructor() {
@@ -19,6 +20,7 @@ export class CompareMode {
 
     this.resultsRenderer = new ResultsRenderer(this.compareResultsContainer);
     this.comparison = new Comparison();
+    this.diffhighlighter = new DiffHighlighter();
     this.modalManager = new ModalManager();
 
     this.init();
@@ -31,10 +33,10 @@ export class CompareMode {
   addEventListeners() {
     this.compareButton.addEventListener("click", this.handleCompare.bind(this));
 
-    this.diffHighlightButton.addEventListener("click", () => {
-      console.log("Highlight Differences functionality to be implemented.");
-      // Call your highlight differences logic here
-    });
+    this.diffHighlightButton.addEventListener(
+      "click",
+      this.handleDiffHighlight.bind(this)
+    );
 
     this.stylometryAnalysisButton.addEventListener("click", () => {
       console.log("Stylometry Analysis functionality to be implemented.");
@@ -104,5 +106,41 @@ export class CompareMode {
     };
 
     this.resultsRenderer.renderComparisonResults(comparisonResults);
+  }
+
+  handleDiffHighlight() {
+    const originalText = this.originalTextArea.value.trim();
+    const comparingText = this.comparingTextArea.value.trim();
+
+    if (!originalText || !comparingText) {
+      this.modalManager.showModal(
+        "Enter Both Fields",
+        "Both fields have to be filled out for check differences"
+      );
+
+      return;
+    }
+
+    const highlightedText = this.diffhighlighter.highlightDifferences(
+      originalText,
+      comparingText
+    );
+    this.renderHightlightedDifferences(highlightedText);
+  }
+
+  //   Diff Highlighter Funcs
+  renderHightlightedDifferences(highlightedTexts) {
+    this.compareResultsContainer.innerHTML = `
+        <div class="highlighted-differences">
+            <div class="highlighted-text original-text">
+            <h3>Original Text</h3>
+            <div>${highlightedTexts.text1}</div>
+            </div>
+            <div class="highlighted-text comparing-text">
+            <h3>Comparing Text</h3>
+            <div>${highlightedTexts.text2}</div>
+            </div>
+        </div>
+    `;
   }
 }
