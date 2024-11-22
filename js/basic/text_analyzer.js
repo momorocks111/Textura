@@ -1,6 +1,6 @@
 "use strict";
 
-import { sentimentLexicon } from "./sentiment_lexicon.js";
+import { sentimentLexicon } from "../archive/sentiment_lexicon.js";
 
 export class TextAnalyzer {
   constructor(text) {
@@ -102,19 +102,18 @@ export class TextAnalyzer {
   }
 
   analyzeSentiment() {
-    const words = this.text.toLowerCase().match(/\b\w+\b/g);
-
-    let score = 0;
-    let sentenceScore = 0;
-    let isNegated = false;
-    let intensifierMultiplier = 1;
-
+    const words = this.text.toLowerCase().match(/\b\w+\b/g) || [];
     const sentences = this.text
       .split(/[.!?]+/)
       .filter((s) => s.trim().length > 0);
 
+    let totalScore = 0;
+
     sentences.forEach((sentence) => {
       const sentenceWords = sentence.toLowerCase().match(/\b\w+\b/g) || [];
+      let sentenceScore = 0;
+      let isNegated = false;
+      let intensifierMultiplier = 1;
 
       sentenceWords.forEach((word, index) => {
         if (sentimentLexicon.negators.has(word)) {
@@ -138,25 +137,21 @@ export class TextAnalyzer {
           wordScore *= intensifierMultiplier;
           intensifierMultiplier = 1;
 
-          // Consider Context
           const surroundingWords = sentenceWords
             .slice(Math.max(0, index - 2), index)
             .concat(sentenceWords.slice(index + 1, index + 3));
-
           const contextMultiplier =
             this.calculateContextMultiplier(surroundingWords);
 
           wordScore *= contextMultiplier;
-
           sentenceScore += wordScore;
         }
       });
 
-      score += sentenceScore;
-      sentenceScore = 0;
+      totalScore += sentenceScore;
     });
 
-    const normalizedScore = score / sentences.length;
+    const normalizedScore = totalScore / sentences.length;
 
     return {
       score: normalizedScore,

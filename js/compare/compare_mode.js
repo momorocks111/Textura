@@ -5,6 +5,7 @@ import { ResultsRenderer } from "../utils/results_renderer.js";
 import { Comparison } from "./comparison.js";
 import { ModalManager } from "../utils/modal_manager.js";
 import { DiffHighlighter } from "./diff_highlighter.js";
+import { StylometryAnalyzer } from "./stylometry_analyzer.js";
 
 export class CompareMode {
   constructor() {
@@ -39,8 +40,10 @@ export class CompareMode {
     );
 
     this.stylometryAnalysisButton.addEventListener("click", () => {
-      console.log("Stylometry Analysis functionality to be implemented.");
-      // Call your stylometry analysis logic here
+      this.stylometryAnalysisButton.addEventListener(
+        "click",
+        this.handleStylometryAnalysis.bind(this)
+      );
     });
 
     this.commonPhraseButton.addEventListener("click", () => {
@@ -142,5 +145,26 @@ export class CompareMode {
             </div>
         </div>
     `;
+  }
+
+  async handleStylometryAnalysis() {
+    const originalText = this.originalTextArea.value.trim();
+    const comparingText = this.comparingTextArea.value.trim();
+
+    if (!originalText || !comparingText) {
+      this.modalManager.showModal(
+        "Missing Text",
+        "Please enter text in both fields to perform stylometric analysis"
+      );
+
+      return;
+    }
+
+    const stylometryAnalyzer = new StylometryAnalyzer(
+      originalText,
+      comparingText
+    );
+    const analysisResults = await stylometryAnalyzer.analyze();
+    this.resultsRenderer.renderStylometryResults(analysisResults);
   }
 }

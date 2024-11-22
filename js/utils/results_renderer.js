@@ -199,4 +199,66 @@ export class ResultsRenderer {
         return "neutral-sentiment";
     }
   }
+
+  renderStylometryResults(results) {
+    this.container.innerHTML = `
+      <div class="stylometry-results">
+        <div class="metrics-section">
+          <h2 class="metrics-title">Original Text Metrics</h2>
+          ${this.renderMetrics(results.original)}
+        </div>
+        <div class="metrics-section">
+          <h2 class="metrics-title">Comparing Text Metrics</h2>
+          ${this.renderMetrics(results.comparing)}
+        </div>
+        <div class="metrics-section">
+          <h2 class="metrics-title">Differences</h2>
+          ${this.renderMetrics(results.differences)}
+        </div>
+      <div>
+    `;
+  }
+
+  /**
+   * For Stylometry Analysis
+   * @param {any} metrics
+   */
+  renderMetrics(metrics) {
+    return `
+      <div class="metrics-list">
+        ${Object.entries(metrics)
+          .map(
+            ([key, value]) => `
+          <div class="metric-item">
+            <div class="metric-label">${this.formatLabel(key)}</div>
+            <div class="metric-value">${this.formatValue(value)}</div>
+          </div>
+        `
+          )
+          .join("")}
+      </div>
+    `;
+  }
+
+  formatLabel(key) {
+    return key
+      .replace(/([A-Z])/g, " $1")
+      .replace(/^./, (str) => str.toUpperCase());
+  }
+
+  formatValue(value) {
+    if (typeof value === "number") {
+      return value.toFixed(2);
+    } else if (typeof value == "object" && value !== null) {
+      if ("score" in value && "label" in value && "magnitude" in value) {
+        return `Label: ${value.label}, Score: ${value.score.toFixed(
+          2
+        )}, Magnitude: ${value.magnitude.toFixed(2)}`;
+      } else {
+        return JSON.stringify(value);
+      }
+    } else {
+      return value;
+    }
+  }
 }

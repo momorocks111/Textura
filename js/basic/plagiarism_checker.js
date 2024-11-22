@@ -1,6 +1,6 @@
 "use strict";
 
-import { wordBank } from "./word_bank.js";
+import { wordBank } from "../archive/word_bank.js";
 
 export class PlagiarismChecker {
   constructor() {
