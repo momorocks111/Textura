@@ -1031,6 +1031,50 @@ textarea:focus {
 /*====================================
 ============ SUMMARY MODE ============
 ====================================*/
+/* Summary Function */
+.summary-result {
+  font-family: Arial, sans-serif;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 15px;
+  margin-block-start: 20px;
+  position: relative;
+}
+
+.summary-result h2 {
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  margin-block-end: 15px;
+}
+
+.summary-content {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+.copy-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: var(--accent);
+  color: var(--white-clr);
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.copy-button:hover {
+  background-color: var(--accent-dark);
+}
+
+.copy-button.copied {
+  background-color: var(--success-clr);
+}
 
 /*====================================
 ============ KEYWORD MODE ============
@@ -1347,6 +1391,25 @@ textarea:focus {
   .comparison-summary h3 {
     font-size: 1.4em;
   }
+
+  /* Summary Feature */
+  .summary-result {
+    padding: 25px;
+  }
+
+  .summary-result h2 {
+    font-size: 1.4rem;
+  }
+
+  .summary-content {
+    font-size: 1rem;
+  }
+
+  .copy-button {
+    width: 35px;
+    height: 35px;
+    font-size: 1.1rem;
+  }
 }
 
 /* Desktop view */
@@ -1545,5 +1608,27 @@ textarea:focus {
   .text-analysis h3,
   .comparison-summary h3 {
     font-size: 1.6em;
+  }
+
+  /* Summary Feature */
+  .summary-result {
+    padding: 30px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .summary-result h2 {
+    font-size: 1.6rem;
+  }
+
+  .summary-content {
+    font-size: 1.1rem;
+  }
+
+  .copy-button {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
   }
 }
