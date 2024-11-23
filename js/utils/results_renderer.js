@@ -261,4 +261,127 @@ export class ResultsRenderer {
       return value;
     }
   }
+
+  // Comparing Sophistication
+  renderSophisticationResults(results) {
+    this.container.innerHTML = `
+      <div class="sophistication-results">
+        <h2>Sophistication Analysis Results</h2>
+        <div class="sophistication-container">
+          <div class="text-analysis">
+            <h3>Original Text</h3>
+            ${this.renderTextAnalysis(results.text1)}
+          </div>
+          <div class="text-analysis">
+            <h3>Comparing Text</h3>
+            ${this.renderTextAnalysis(results.text2)}
+          </div>
+          </div>
+        <div class="comparison-summary">
+          <h3>Comparison Summary</h3>
+          ${this.renderComparisonSummary(results.comparison)}
+        </div>
+      </div>
+    `;
+  }
+
+  renderTextAnalysis(analysis) {
+    return `
+      <div class="analysis-item">
+        <span>Vocabulary Complexity:</span>
+        <div class="progress-bar" style="width: ${
+          analysis.vocabularyComplexity
+        }%"></div>
+      </div>
+      <div class="analysis-item">
+        <span>Sentence Complexity:</span>
+        <div class="progress-bar" style="width: ${
+          analysis.sentenceStructure.complexSentenceRatio
+        }%"></div>
+      </div>
+      <div class="analysis-item">
+        <span>Grammar Accuracy:</span>
+        <div class="progress-bar" style="width: ${
+          analysis.grammarAccuracy
+        }%"></div>
+      </div>
+      <div class="analysis-item">
+        <span>Idiom Usage:</span>
+        <div class="progress-bar" style="width: ${
+          analysis.idiomUsage * 10
+        }%"></div>
+      </div>
+      <div class="analysis-item">
+        <span>Punctuation Usage:</span>
+        <div class="progress-bar" style="width: ${
+          analysis.punctuationUsage
+        }%"></div>
+      </div>
+      <div class="analysis-item">
+        <span>Overall Sophistication:</span>
+        <div class="progress-bar" style="width: ${
+          analysis.overallSophistication
+        }%"></div>
+      </div>
+    `;
+  }
+
+  renderComparisonSummary(comparison) {
+    const getComparisonClass = (value) =>
+      value > 0 ? "positive" : value < 0 ? "negative" : "neutral";
+
+    return `
+      <div class="comparison-item ${getComparisonClass(
+        comparison.vocabularyComplexity
+      )}">
+        <span>Vocabulary Complexity Difference:</span>
+        <span>${comparison.vocabularyComplexity.toFixed(2)}%</span>
+      </div>
+      <div class="comparison-item ${getComparisonClass(
+        comparison.sentenceComplexity
+      )}">
+        <span>Sentence Complexity Difference:</span>
+        <span>${comparison.sentenceComplexity.toFixed(2)}%</span>
+      </div>
+      <div class="comparison-item ${getComparisonClass(
+        comparison.grammarAccuracy
+      )}">
+        <span>Grammar Accuracy Difference:</span>
+        <span>${comparison.grammarAccuracy.toFixed(2)}%</span>
+      </div>
+      <div class="comparison-item ${getComparisonClass(comparison.idiomUsage)}">
+        <span>Idiom Usage Difference:</span>
+        <span>${comparison.idiomUsage.toFixed(2)}</span>
+      </div>
+      <div class="comparison-item ${getComparisonClass(
+        comparison.punctuationUsage
+      )}">
+        <span>Punctuation Usage Difference:</span>
+        <span>${comparison.punctuationUsage.toFixed(2)}%</span>
+      </div>
+      <div class="comparison-item ${getComparisonClass(
+        comparison.overallSophistication
+      )}">
+        <span>Overall Sophistication Difference:</span>
+        <span>${comparison.overallSophistication.toFixed(2)}%</span>
+      </div>
+      <p class="comparison-conclusion">
+        ${
+          comparison.overallSophistication > 0
+            ? "The original text is more sophisticated."
+            : comparison.overallSophistication < 0
+            ? "The comparing text is more sophisticated."
+            : "Both texts have similar levels of sophistication."
+        }
+      </p>
+    `;
+  }
+
+  showLoadingAnimation() {
+    this.container.innerHTML = '<div class="loading-spinner"></div>';
+  }
+
+  hideLoadingAnimation() {
+    this.container.innerHTML = "";
+  }
 }

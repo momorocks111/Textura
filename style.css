@@ -943,6 +943,91 @@ textarea:focus {
   font-weight: 700;
 }
 
+/* TEXT COMPARING SOPHISTICATION */
+.sophistication-results {
+  font-family: Arial, sans-serif;
+  padding: 15px;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  margin-top: 20px;
+}
+.text-analysis,
+.comparison-summary {
+  margin-bottom: 20px;
+}
+
+.text-analysis h3,
+.comparison-summary h3 {
+  color: var(--text-primary);
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.analysis-item {
+  padding: 1rem;
+  border: 1px solid var(--text-secondary);
+}
+
+.loading-spinner {
+  border: 4px solid var(--bg-secondary);
+  border-top: 4px solid var(--accent);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.progress-bar {
+  height: 20px;
+  background-color: var(--bg-secondary);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--progress);
+  background-color: var(--accent);
+  transition: width 0.5s ease-in-out;
+}
+
+.comparison-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.comparison-item.positive {
+  color: var(--positive-clr);
+}
+.comparison-item.negative {
+  color: var(--negative-clr);
+}
+.comparison-item.neutral {
+  color: var(--text-secondary);
+}
+
+.comparison-conclusion {
+  font-weight: bold;
+  margin-top: 20px;
+  text-align: center;
+}
+
 /*====================================
 ============ SUMMARY MODE ============
 ====================================*/
@@ -1252,6 +1337,16 @@ textarea:focus {
   .metric-value {
     font-size: 1.1rem;
   }
+
+  /* Compare Sophistication */
+  .sophistication-results {
+    padding: 20px;
+  }
+
+  .text-analysis h3,
+  .comparison-summary h3 {
+    font-size: 1.4em;
+  }
 }
 
 /* Desktop view */
@@ -1420,5 +1515,35 @@ textarea:focus {
 
   .metric-label {
     font-size: 1.2rem;
+  }
+
+  /* Sophistication Comparison */
+  .sophistication-results {
+    padding: 30px;
+  }
+
+  .sophistication-results h2 {
+    font-size: 1.875rem;
+    border-bottom: 1px solid var(--text-primary);
+    padding-block-end: 1rem;
+  }
+
+  .sophistication-container {
+    margin-block-start: 1rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .text-analysis {
+    width: 48%;
+  }
+
+  .comparison-summary {
+    width: 100%;
+  }
+
+  .text-analysis h3,
+  .comparison-summary h3 {
+    font-size: 1.6em;
   }
 }

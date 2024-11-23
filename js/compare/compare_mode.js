@@ -6,6 +6,7 @@ import { Comparison } from "./comparison.js";
 import { ModalManager } from "../utils/modal_manager.js";
 import { DiffHighlighter } from "./diff_highlighter.js";
 import { StylometryAnalyzer } from "./stylometry_analyzer.js";
+import { SophisticationAnalyzer } from "./sophistication_analyzer.js";
 
 export class CompareMode {
   constructor() {
@@ -39,17 +40,15 @@ export class CompareMode {
       this.handleDiffHighlight.bind(this)
     );
 
-    this.stylometryAnalysisButton.addEventListener("click", () => {
-      this.stylometryAnalysisButton.addEventListener(
-        "click",
-        this.handleStylometryAnalysis.bind(this)
-      );
-    });
+    this.stylometryAnalysisButton.addEventListener(
+      "click",
+      this.handleStylometryAnalysis.bind(this)
+    );
 
-    this.commonPhraseButton.addEventListener("click", () => {
-      console.log("Compare Sophistication functionality to be implemented.");
-      // Call your sophistication comparison logic here
-    });
+    this.commonPhraseButton.addEventListener(
+      "click",
+      this.handleSophisticationComparison.bind(this)
+    );
   }
 
   async handleCompare() {
@@ -166,5 +165,43 @@ export class CompareMode {
     );
     const analysisResults = await stylometryAnalyzer.analyze();
     this.resultsRenderer.renderStylometryResults(analysisResults);
+  }
+
+  async handleSophisticationComparison() {
+    const originalText = this.originalTextArea.value.trim();
+    const comparingText = this.comparingTextArea.value.trim();
+
+    if (!this.validateTexts(originalText, comparingText)) return;
+
+    this.resultsRenderer.showLoadingAnimation();
+
+    const sophisticationAnalyzer = new SophisticationAnalyzer(
+      originalText,
+      comparingText
+    );
+    const analysisResults = await sophisticationAnalyzer.analyze();
+
+    this.resultsRenderer.hideLoadingAnimation();
+    this.resultsRenderer.renderSophisticationResults(analysisResults);
+  }
+
+  validateTexts(text1, text2) {
+    if (!text1 || !text2) {
+      this.modalManager.showModal(
+        "Enter Both Fields",
+        "Both fields must be filled out for comparison"
+      );
+      return false;
+    }
+
+    if (text1.split(/\s+/).length < 30 || text2.split(/\s+/).length < 30) {
+      this.modalManager.showModal(
+        "Insufficient Words",
+        "Each text must contain at least 30 words"
+      );
+      return false;
+    }
+
+    return true;
   }
 }
