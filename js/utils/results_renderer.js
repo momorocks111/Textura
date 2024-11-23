@@ -384,4 +384,37 @@ export class ResultsRenderer {
   hideLoadingAnimation() {
     this.container.innerHTML = "";
   }
+
+  //=======================================
+  //============= SUMMARY MODE ============
+  //=======================================
+  // Summary Mode
+  renderSummary(summary) {
+    this.container.innerHTML = `
+      <div class="summary-result">
+        <h2>Summary</h2>
+        <div class="summary-content">${summary}</div>
+        <button class="copy-button" aria-label="Copy summary">
+          <i class="fas fa-clipboard"></i>
+        </button>
+      </div>
+    `;
+
+    this.addCopyFunctionality();
+  }
+
+  addCopyFunctionality() {
+    const copyButton = this.container.querySelector(".copy-button");
+    const summaryContent = this.container.querySelector(".summary-content");
+
+    copyButton.addEventListener("click", () => {
+      navigator.clipboard
+        .writeText(summaryContent.textContent)
+        .then(() => {
+          copyButton.classList.add("copied");
+          setTimeout(() => copyButton.classList.remove("copied"), 2000);
+        })
+        .catch((err) => console.error("Failed to copy text: ", err));
+    });
+  }
 }
