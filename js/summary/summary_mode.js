@@ -4,6 +4,7 @@ import { TextAnalyzer } from "../basic/text_analyzer.js";
 import { ResultsRenderer } from "../utils/results_renderer.js";
 import { ModalManager } from "../utils/modal_manager.js";
 import { Summarizer } from "./summarizer.js";
+import { Paraphraser } from "./paraphraser.js";
 
 export class SummaryMode {
   constructor() {
@@ -62,6 +63,11 @@ export class SummaryMode {
   handleParaphrase() {
     const text = this.summarizationInput.value.trim();
     if (!this.validateText(text, "paraphrase")) return;
+
+    const paraphraser = new Paraphraser(text);
+    const paraphrasedText = paraphraser.paraphrase();
+
+    this.resultsRenderer.renderParaphrase(paraphrasedText, text);
   }
 
   handleThematicAnalysis() {
