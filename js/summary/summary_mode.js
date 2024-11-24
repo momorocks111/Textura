@@ -5,6 +5,7 @@ import { ResultsRenderer } from "../utils/results_renderer.js";
 import { ModalManager } from "../utils/modal_manager.js";
 import { Summarizer } from "./summarizer.js";
 import { Paraphraser } from "./paraphraser.js";
+import { ThematicAnalyzer } from "./thematic_analyzer.js";
 
 export class SummaryMode {
   constructor() {
@@ -73,6 +74,19 @@ export class SummaryMode {
   handleThematicAnalysis() {
     const text = this.summarizationInput.value.trim();
     if (!this.validateText(text, "thematic analysis")) return;
+
+    // if (!isTextCoherent(text)) {
+    //   this.modalManager.showModal(
+    //     "Invalid Text",
+    //     "Please enter coherent text for analysis"
+    //   );
+
+    //   return;
+    // }
+
+    const thematicAnalyzer = new ThematicAnalyzer(text);
+    const analysisResults = thematicAnalyzer.analyze();
+    this.resultsRenderer.renderThematicAnalysis(analysisResults);
   }
 
   handleHeadlineGeneration() {
@@ -89,5 +103,14 @@ export class SummaryMode {
       return false;
     }
     return true;
+  }
+
+  isTextCoherent(text) {
+    const words = text.split(/\s+/);
+    if (words.length < 30) return false;
+
+    // Simple coherence check (can be improved with more sophisticated NLP techniques)
+    const uniqueWords = new Set(words.map((word) => word.toLowerCase()));
+    return uniqueWords.size / words.length > 0.4; // Arbitrary threshold
   }
 }

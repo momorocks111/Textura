@@ -473,4 +473,63 @@ export class ResultsRenderer {
         .catch((err) => console.error("Failed to copy text: ", err));
     });
   }
+
+  // Render Thematic Analysis
+  renderThematicAnalysis(results) {
+    const themeColors = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A", "#98D8C8"];
+
+    this.container.innerHTML = `
+      <div class="thematic-analysis-results">
+        <h2>Thematic Analysis Results</h2>
+        <p>Word Count: ${results.wordCount}</p>
+        <div class="themes-container">
+          ${results.themes
+            .map(
+              (theme, index) => `
+            <div class="theme-bubble" style="background-color: ${
+              themeColors[index % themeColors.length]
+            }">
+              <h3>Theme ${theme.id}</h3>
+              <p>Keywords: ${theme.keywords.join(", ")}</p>
+              <ul>
+                ${theme.sentences
+                  .map((sentence) => `<li>${sentence}</li>`)
+                  .join("")}
+              </ul>
+            </div>
+          `
+            )
+            .join("")}
+        </div>
+        <div class="sentiment-chart">
+          <h3>Sentiment Analysis</h3>
+          ${this.renderSentimentChart(results.sentimentScores)}
+        </div>
+    </div>
+    `;
+  }
+
+  renderSentimentChart(sentimentScores) {
+    const chartHeight = 200;
+    const barWidth = 5;
+    const svg = `
+      <svg width="${sentimentScores.length * barWidth}" height="${chartHeight}">
+        ${sentimentScores
+          .map((score, index) => {
+            const height = Math.abs(score) * (chartHeight / 2);
+            const y = score > 0 ? chartHeight / 2 - height : chartHeight / 2;
+            const color = score > 0 ? "#4CAF50" : "#F44336";
+            return `<rect x="${
+              index * barWidth
+            }" y="${y}" width="${barWidth}" height="${height}" fill="${color}" />`;
+          })
+          .join("")}
+        <line x1="0" y1="${chartHeight / 2}" x2="${
+      sentimentScores.length * barWidth
+    }" y2="${chartHeight / 2}" stroke="black" />
+    </svg>
+    `;
+
+    return svg;
+  }
 }
