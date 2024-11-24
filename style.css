@@ -1076,6 +1076,70 @@ textarea:focus {
   background-color: var(--success-clr);
 }
 
+/* Paraphrase Feature */
+.paraphrase-result {
+  font-family: Arial, sans-serif;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 15px;
+  margin-block-start: 20px;
+  position: relative;
+}
+
+.paraphrase-result h2,
+.paraphrase-result h3 {
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.paraphrase-result h2 {
+  font-size: 1.2rem;
+}
+
+.paraphrase-result h3 {
+  font-size: 1rem;
+  margin-block-start: 15px;
+}
+
+.paraphrased-content,
+.original-content {
+  background-color: var(--result-bg);
+  border: 1px solid var(--result-border);
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+.highlighted {
+  background-color: var(--changed-bg);
+  color: var(--changed-text);
+}
+
+.paraphrase-copy-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: var(--accent);
+  color: var(--white-clr);
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.paraphrase-copy-button:hover {
+  background-color: var(--accent-dark);
+}
+
+.copy-button.copied {
+  background-color: var(--success-clr);
+}
+
 /*====================================
 ============ KEYWORD MODE ============
 ====================================*/
@@ -1410,6 +1474,31 @@ textarea:focus {
     height: 35px;
     font-size: 1.1rem;
   }
+
+  /* Paraphrase */
+  .paraphrase-result {
+    padding: 20px;
+  }
+
+  .paraphrase-result h2 {
+    font-size: 1.4rem;
+  }
+
+  .paraphrase-result h3 {
+    font-size: 1.2rem;
+  }
+
+  .paraphrased-content,
+  .original-content {
+    font-size: 1rem;
+    padding: 15px;
+  }
+
+  .paraphrase-copy-button {
+    width: 35px;
+    height: 35px;
+    font-size: 1.1rem;
+  }
 }
 
 /* Desktop view */
@@ -1627,6 +1716,34 @@ textarea:focus {
   }
 
   .copy-button {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+
+  /* Paraphrase */
+  .paraphrase-result {
+    padding: 25px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .paraphrase-result h2 {
+    font-size: 1.6rem;
+  }
+
+  .paraphrase-result h3 {
+    font-size: 1.3rem;
+  }
+
+  .paraphrased-content,
+  .original-content {
+    font-size: 1.1rem;
+    padding: 20px;
+  }
+
+  .paraphrase-copy-button {
     width: 40px;
     height: 40px;
     font-size: 1.2rem;

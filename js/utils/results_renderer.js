@@ -403,6 +403,40 @@ export class ResultsRenderer {
     this.addCopyFunctionality();
   }
 
+  // Paraphase Feature
+  renderParaphrase(paraphrasedText, originalText) {
+    this.container.innerHTML = `
+      <div class="paraphrase-result">
+        <h2>Paraphrased Text</h2>
+        <div class="paraphrased-content">${paraphrasedText}</div>
+        <h3>Original Text</h3>
+        <div class="original-content">${this.highlightDifferences(
+          originalText,
+          paraphrasedText
+        )}
+        </div>
+      </div>
+    `;
+
+    this.addParaphraseCopyFunctionality();
+  }
+
+  highlightDifferences(originalText, paraphrasedText) {
+    const originalWords = originalText.split(" ");
+    const paraphrasedWords = paraphrasedText.split(" ");
+    let result = "";
+
+    for (let i = 0; i < originalWords.length; i++) {
+      if (originalWords[i] !== paraphrasedWords[i]) {
+        result += `<span class="highlighted">${originalWords[i]}</span> `;
+      } else {
+        result += originalWords[i] + " ";
+      }
+    }
+
+    return result.trim();
+  }
+
   addCopyFunctionality() {
     const copyButton = this.container.querySelector(".copy-button");
     const summaryContent = this.container.querySelector(".summary-content");
@@ -410,6 +444,28 @@ export class ResultsRenderer {
     copyButton.addEventListener("click", () => {
       navigator.clipboard
         .writeText(summaryContent.textContent)
+        .then(() => {
+          copyButton.classList.add("copied");
+          setTimeout(() => copyButton.classList.remove("copied"), 2000);
+        })
+        .catch((err) => console.error("Failed to copy text: ", err));
+    });
+  }
+
+  addParaphraseCopyFunctionality() {
+    const copyButton = document.createElement("button");
+    copyButton.className = "paraphrase-copy-button";
+    copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+    copyButton.setAttribute("aria-label", "Copy paraphrased text");
+
+    const paraphrasedContent = this.container.querySelector(
+      ".paraphrased-content"
+    );
+    paraphrasedContent.parentNode.insertBefore(copyButton, paraphrasedContent);
+
+    copyButton.addEventListener("click", () => {
+      navigator.clipboard
+        .writeText(paraphrasedContent.textContent)
         .then(() => {
           copyButton.classList.add("copied");
           setTimeout(() => copyButton.classList.remove("copied"), 2000);
