@@ -302,32 +302,107 @@ export class Paraphraser {
 
   ensureGrammaticalCorrectness(sentence) {
     // Basic corrections
-    sentence = sentence.replace(
-      /\b(a|an)\s+(\w+)/gi,
-      (match, article, word) => {
-        return (/^[aeiou]/i.test(word) ? "an " : "a ") + word;
-      }
-    );
-    sentence = sentence.replace(/\s+/g, " ").trim();
-    sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1);
+    sentence = this.correctArticles(sentence);
+    sentence = this.correctCapitalization(sentence);
+    sentence = this.correctPunctuation(sentence);
 
     // Apply grammar rules
     grammarRules.forEach((rule) => {
-      if (rule.regex.test(sentence)) {
-        console.warn(`Grammar issue detected: ${rule.name}`);
-        // Here you can implement specific corrections for each rule
-        // For demonstration, we'll just log the issue
-      }
+      sentence = this.applyGrammarRule(sentence, rule);
     });
 
-    // Ensure proper spacing after punctuation
-    sentence = sentence.replace(/([.,!?])(\w)/g, "$1 $2");
+    return sentence;
+  }
 
-    // Ensure sentence ends with proper punctuation
+  correctArticles(sentence) {
+    return sentence.replace(/\b(a|an)\s+(\w+)/gi, (match, article, word) => {
+      return this.getCorrectArticle(word) + " " + word;
+    });
+  }
+
+  getCorrectArticle(word) {
+    return /^[aeiou]/i.test(word) ? "an" : "a";
+  }
+
+  correctCapitalization(sentence) {
+    return sentence.replace(/(^\w|\.\s+\w)/g, (letter) => letter.toUpperCase());
+  }
+
+  correctPunctuation(sentence) {
+    sentence = sentence.replace(/\s+/g, " ").trim();
+    sentence = sentence.replace(/([.,!?])(\w)/g, "$1 $2");
     if (!/[.!?]$/.test(sentence)) {
       sentence += ".";
     }
-
     return sentence;
+  }
+
+  applyGrammarRule(sentence, rule) {
+    if (rule.regex.test(sentence)) {
+      console.warn(`Grammar issue detected: ${rule.name}`);
+      switch (rule.name) {
+        case "Double negatives":
+          return this.correctDoubleNegatives(sentence);
+        case "Subject-verb agreement":
+          return this.correctSubjectVerbAgreement(sentence);
+        case "Misused apostrophe":
+          return this.correctMisusedApostrophe(sentence);
+        // Add more specific corrections for other rules
+        default:
+          return sentence;
+      }
+    }
+    return sentence;
+  }
+
+  correctDoubleNegatives(sentence) {
+    return sentence.replace(
+      /\b(?:not|never).*?\b(?:no|not|never)\b/i,
+      (match) => {
+        const words = match.split(/\s+/);
+        return words
+          .filter(
+            (word) => !["not", "never", "no"].includes(word.toLowerCase())
+          )
+          .join(" ");
+      }
+    );
+  }
+
+  correctSubjectVerbAgreement(sentence) {
+    const corrections = {
+      "I are": "I am",
+      "he are": "he is",
+      "she are": "she is",
+      "it are": "it is",
+      "I were": "I was",
+      "he were": "he was",
+      "she were": "she was",
+      "it were": "it was",
+      "I have been": "I has been",
+      "he have been": "he has been",
+      "she have been": "she has been",
+      "it have been": "it has been",
+    };
+
+    return sentence.replace(
+      /\b(I|he|she|it)\s+(are|were|have been)\b/gi,
+      (match, subject, verb) => {
+        const key = `${subject.toLowerCase()} ${verb.toLowerCase()}`;
+        return corrections[key] || match;
+      }
+    );
+  }
+
+  correctMisusedApostrophe(sentence) {
+    return sentence.replace(
+      /\b(\w+)(')s\b(?!\s+(?:is|has|was|does))/gi,
+      (match, word, apostrophe) => {
+        if (word.toLowerCase() === "it") {
+          return "its";
+        }
+        return `${word}'s`;
+      }
+    );
   }
 }

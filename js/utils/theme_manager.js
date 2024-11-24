@@ -105,7 +105,7 @@ export class ThemeManager {
     root.style.setProperty("--bg-primary", "#1a1a2e");
     root.style.setProperty("--bg-secondary", "#16213e");
     root.style.setProperty("--text-primary", "#e94560");
-    root.style.setProperty("--text-secondary", "#0f3460");
+    root.style.setProperty("--text-secondary", "#2eb0c4");
     root.style.setProperty("--accent", "#e94560");
     root.style.setProperty("--accent-light", "#ff6b6b");
     root.style.setProperty("--white-clr", "#ffffff");
