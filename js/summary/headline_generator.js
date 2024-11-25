@@ -23,7 +23,7 @@ export class HeadlineGenerator {
 
     return Object.entries(wordFrequency)
       .sort((a, b) => b[1] - a[1])
-      .slice(0, 5)
+      .slice(0, 10) // Increase to top 10 keywords
       .map(([word]) => word);
   }
 
@@ -51,47 +51,50 @@ export class HeadlineGenerator {
       ...this.generateEmotionalHeadlines(),
     ];
 
-    // Shuffle and select five random headlines
     return this.getRandomSubset(allHeadlines, 5);
   }
 
   getRandomSubset(array, size) {
-    const shuffled = array.sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, size);
+    return array.sort(() => 0.5 - Math.random()).slice(0, size);
+  }
+
+  getRandomKeywords(count) {
+    return this.getRandomSubset(this.keywords, count);
+  }
+
+  replaceKeywords(template) {
+    const keywordCount = (template.match(/{keyword\d+}/g) || []).length;
+    const selectedKeywords = this.getRandomKeywords(keywordCount);
+
+    return template.replace(
+      /{keyword(\d+)}/g,
+      (_, index) =>
+        selectedKeywords[index - 1] ||
+        this.keywords[Math.floor(Math.random() * this.keywords.length)]
+    );
   }
 
   generateQuestionHeadlines() {
     return headlineTemplates.questions.map((template) =>
-      template
-        .replace("{keyword1}", this.keywords[0])
-        .replace("{keyword2}", this.keywords[1])
+      this.replaceKeywords(template)
     );
   }
 
   generateHowToHeadlines() {
     return headlineTemplates.howTo.map((template) =>
-      template
-        .replace("{keyword1}", this.keywords[0])
-        .replace("{keyword2}", this.keywords[1])
+      this.replaceKeywords(template)
     );
   }
 
   generateListHeadlines() {
-    const number = Math.floor(Math.random() * 7) + 3;
-    return headlineTemplates.lists.map((template) =>
-      template
-        .replace("{number}", number)
-        .replace("{keyword1}", this.keywords[0])
-        .replace("{keyword2}", this.keywords[1])
-    );
+    return headlineTemplates.lists.map((template) => {
+      const number = Math.floor(Math.random() * 7) + 3;
+      return this.replaceKeywords(template.replace("{number}", number));
+    });
   }
 
   generateEmotionalHeadlines() {
     const templates = headlineTemplates.emotional[this.sentiment];
-    return templates.map((template) =>
-      template
-        .replace("{keyword1}", this.keywords[0])
-        .replace("{keyword2}", this.keywords[1])
-    );
+    return templates.map((template) => this.replaceKeywords(template));
   }
 }
