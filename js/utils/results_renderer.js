@@ -588,6 +588,18 @@ export class ResultsRenderer {
         const selectedHeadline =
           this.container.querySelectorAll(".headline-option p")[index]
             .textContent;
+
+        // Copy to clipboard
+        navigator.clipboard
+          .writeText(selectedHeadline)
+          .then(() => {
+            console.log("Headline copied to clipboard");
+          })
+          .catch((err) => {
+            console.error("Failed to copy text: ", err);
+          });
+
+        // Call the select callback
         callbacks.selectCallback(selectedHeadline);
       });
     });
