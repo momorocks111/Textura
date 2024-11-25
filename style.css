@@ -1220,28 +1220,36 @@ textarea:focus {
   color: var(--white-clr);
   font-size: 24px;
   text-align: center;
+  margin-bottom: 1.5rem;
 }
 
 .headline-option {
   background-color: var(--result-bg);
   border: 1px solid var(--result-border);
   padding: 15px;
-  margin-block-end: 15px;
+  margin-bottom: 15px;
   border-radius: 4px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.headline-option:hover {
+  transform: translateY(-3px);
 }
 
 .headline-option h3 {
   color: var(--text-primary);
-  margin-block-start: 0;
+  margin-top: 0;
+  font-size: 18px;
 }
 
 .headline-option p {
   color: var(--white-clr);
   font-size: 16px;
+  margin-bottom: 0.75rem;
 }
 
 .headline-btn-container {
-  margin-block-start: 0.5rem;
+  margin-top: 0.5rem;
   display: flex;
   justify-content: center;
 }
@@ -1251,16 +1259,22 @@ textarea:focus {
   background-color: var(--accent);
   color: var(--bg-primary);
   border: none;
-  padding: 5px 10px;
-  margin-right: 10px;
+  padding: 8px 12px;
+  margin: 0 5px;
   cursor: pointer;
   border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.edit-headline-btn:hover,
+.select-headline-btn:hover {
+  background-color: var(--accent-light);
 }
 
 .edit-headline-input {
   width: calc(100% - 20px);
-  font-size: 18px;
-  padding: 5px;
+  font-size: 16px;
+  padding: 8px;
   border: 1px solid var(--accent);
   border-radius: 4px;
 }
@@ -1269,8 +1283,17 @@ textarea:focus {
   background-color: var(--accent-light);
   color: var(--bg-primary);
   border: none;
-  padding: 10px;
+  padding: 10px 15px;
   cursor: pointer;
+  border-radius: 4px;
+  display: block;
+  margin: 20px auto 0;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
+}
+
+#regenerateHeadlinesBtn:hover {
+  background-color: var(--accent);
 }
 
 /*====================================
@@ -1651,6 +1674,39 @@ textarea:focus {
   .sentiment-chart svg {
     width: auto;
   }
+
+  /* Headline Generation */
+  .headline-results {
+    padding: 30px;
+  }
+
+  .headline-results h2 {
+    font-size: 28px;
+  }
+
+  .headline-option {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .headline-option h3 {
+    width: 20%;
+    margin-right: 15px;
+    font-size: 20px;
+  }
+
+  .headline-option p {
+    width: 60%;
+    font-size: 18px;
+    margin-bottom: 0;
+  }
+
+  .headline-btn-container {
+    width: 20%;
+    margin-top: 0;
+    justify-content: flex-end;
+  }
 }
 
 /* Desktop view */
@@ -1924,5 +1980,38 @@ textarea:focus {
 
   .theme-bubble li {
     font-size: 16px;
+  }
+
+  /* Headline Generation */
+  .headline-results {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .headline-results h2 {
+    font-size: 32px;
+  }
+
+  .headline-option {
+    padding: 25px;
+  }
+
+  .headline-option h3 {
+    font-size: 22px;
+  }
+
+  .headline-option p {
+    font-size: 20px;
+  }
+
+  .edit-headline-btn,
+  .select-headline-btn {
+    padding: 10px 15px;
+  }
+
+  #regenerateHeadlinesBtn {
+    font-size: 18px;
+    padding: 12px 20px;
   }
 }
