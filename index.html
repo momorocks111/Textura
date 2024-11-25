@@ -166,28 +166,26 @@
         </section>
 
         <!----------------------
-        ----- KEYWORD MODE -----
+        ----- ANALYSIS MODE -----
         ----------------------->
         <section
-          id="keywordExtractionModeContent"
-          class="keyword-section"
-          aria-labelledby="keywordExtractionModeHeading"
+          id="analysisModeContent"
+          class="analysis-section"
+          aria-labelledby="analysisModeHeading"
           hidden
         >
           <textarea
-            id="keywordInput"
+            id="analysisInput"
             rows="10"
-            placeholder="Enter text for keyword extraction..."
+            placeholder="Enter text for analysis..."
           ></textarea>
           <div class="button-group">
-            <button class="extractKeywordsButton">Extract Keywords</button>
-            <button class="kewordDensityButton">
-              Keyword Density Analysis
-            </button>
-            <button class="keywordContextButton">Keyword in Context</button>
-            <button class="keywordTrendsButton">Keyword Trends</button>
+            <button class="textGenerationButton">Generate Text</button>
+            <button class="keywordSuggestionsButton">Suggest Keywords</button>
+            <button class="translationButton">Train Translation Model</button>
+            <button class="clusteringButton">Cluster Sentences</button>
           </div>
-          <div class="keywordResults"></div>
+          <div class="analysisResults"></div>
         </section>
       </div>
     </main>
