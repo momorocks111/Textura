@@ -89,7 +89,7 @@ section {
 .basic-section,
 .compare-section,
 .summary-section,
-.keyword-section {
+.analysis-section {
   text-align: center;
   padding: 1rem;
 }
@@ -108,8 +108,8 @@ textarea {
 #results,
 #compareResults,
 .summaryResults,
-.keywordResults {
-  margin-top: 1rem;
+.analysisResults {
+  margin-block-start: 1rem;
   background-color: var(--result-bg);
   border: 1px solid var(--result-border);
   border-radius: 0.5rem;
@@ -1297,7 +1297,7 @@ textarea:focus {
 }
 
 /*====================================
-============ KEYWORD MODE ============
+============ ANALYSIS MODE ============
 ====================================*/
 
 /*====================================
@@ -1482,7 +1482,7 @@ textarea:focus {
   }
 
   .result-item {
-    padding: 1rem 0;
+    padding: 1rem;
   }
 
   .word-frequency-item,
@@ -1724,7 +1724,7 @@ textarea:focus {
   #results,
   #compareResults,
   .summaryResults,
-  .keywordResults {
+  .analysisResults {
     padding: 1rem;
   }
 

@@ -2,7 +2,7 @@
 
 export class ModeSwitcher {
   constructor() {
-    this.modes = ["basic", "compare", "summarization", "keywordExtraction"];
+    this.modes = ["basic", "compare", "summarization", "analysis"];
     this.currentMode = "basic";
     this.modeContents = {};
     this.modeButtons = {};
