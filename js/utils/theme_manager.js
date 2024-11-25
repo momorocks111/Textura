@@ -121,6 +121,11 @@ export class ThemeManager {
     root.style.setProperty("--sentiment-positive", "#4caf50");
     root.style.setProperty("--sentiment-negative", "#f44336");
     root.style.setProperty("--sentiment-neutral", "#ffc107");
+    root.style.setProperty("--tomato-red", "#ff9898");
+    root.style.setProperty("--khaki-yellow", "#f0e68c");
+    root.style.setProperty("--powder-blue", "#b0e0e6");
+    root.style.setProperty("--lime-green", "#39f5ff");
+    root.style.setProperty("--blue-violet", "#ffadf7");
   }
 
   setLightTheme() {
@@ -144,6 +149,11 @@ export class ThemeManager {
     root.style.setProperty("--sentiment-positive", "#4caf50");
     root.style.setProperty("--sentiment-negative", "#f44336");
     root.style.setProperty("--sentiment-neutral", "#ffc107");
+    root.style.setProperty("--tomato-red", "#FF6F61");
+    root.style.setProperty("--khaki-yellow", "#FFD700");
+    root.style.setProperty("--powder-blue", "#ADD8E6");
+    root.style.setProperty("--lime-green", "#32CD32");
+    root.style.setProperty("--blue-violet", "#8A2BE2");
   }
 
   setNatureTheme() {
@@ -167,6 +177,11 @@ export class ThemeManager {
     root.style.setProperty("--sentiment-positive", "#2ecc71");
     root.style.setProperty("--sentiment-negative", "#e74c3c");
     root.style.setProperty("--sentiment-neutral", "#f1c40f");
+    root.style.setProperty("--tomato-red", "#FF6347");
+    root.style.setProperty("--khaki-yellow", "#F0E68C");
+    root.style.setProperty("--powder-blue", "#B0E0E6");
+    root.style.setProperty("--lime-green", "#FF9898");
+    root.style.setProperty("--blue-violet", "#8A2BE2");
   }
 
   setOceanTheme() {
@@ -190,6 +205,11 @@ export class ThemeManager {
     root.style.setProperty("--sentiment-positive", "#78e08f");
     root.style.setProperty("--sentiment-negative", "#eb2f06");
     root.style.setProperty("--sentiment-neutral", "#f6b93b");
+    root.style.setProperty("--tomato-red", "#1E3A5F");
+    root.style.setProperty("--khaki-yellow", "#4B0082");
+    root.style.setProperty("--powder-blue", "#8B0000");
+    root.style.setProperty("--lime-green", "#2F4F4F");
+    root.style.setProperty("--blue-violet", "#483D8B");
   }
 
   setSunsetTheme() {
@@ -213,6 +233,11 @@ export class ThemeManager {
     root.style.setProperty("--sentiment-positive", "#33d9b2");
     root.style.setProperty("--sentiment-negative", "#ff5252");
     root.style.setProperty("--sentiment-neutral", "#ffb142");
+    root.style.setProperty("--tomato-red", "#1E3A5F");
+    root.style.setProperty("--khaki-yellow", "#4B0082");
+    root.style.setProperty("--powder-blue", "#8B0000");
+    root.style.setProperty("--lime-green", "#2F4F4F");
+    root.style.setProperty("--blue-violet", "#483D8B");
   }
 
   setForestTheme() {
@@ -236,6 +261,11 @@ export class ThemeManager {
     root.style.setProperty("--sentiment-positive", "#52b788");
     root.style.setProperty("--sentiment-negative", "#b7e4c7");
     root.style.setProperty("--sentiment-neutral", "#95d5b2");
+    root.style.setProperty("--tomato-red", "#1E3A5F");
+    root.style.setProperty("--khaki-yellow", "#4B0082");
+    root.style.setProperty("--powder-blue", "#8B0000");
+    root.style.setProperty("--lime-green", "#2F4F4F");
+    root.style.setProperty("--blue-violet", "#483D8B");
   }
 
   setCyberpunkTheme() {
@@ -259,6 +289,11 @@ export class ThemeManager {
     root.style.setProperty("--sentiment-positive", "#00ff00");
     root.style.setProperty("--sentiment-negative", "#ff0000");
     root.style.setProperty("--sentiment-neutral", "#ffff00");
+    root.style.setProperty("--tomato-red", "#1E3A5F");
+    root.style.setProperty("--khaki-yellow", "#4B0082");
+    root.style.setProperty("--powder-blue", "#8B0000");
+    root.style.setProperty("--lime-green", "#2F4F4F");
+    root.style.setProperty("--blue-violet", "#483D8B");
   }
 
   setPastelTheme() {
@@ -282,6 +317,11 @@ export class ThemeManager {
     root.style.setProperty("--sentiment-positive", "#98fb98");
     root.style.setProperty("--sentiment-negative", "#ffb6c1");
     root.style.setProperty("--sentiment-neutral", "#f0e68c");
+    root.style.setProperty("--tomato-red", "#FFFFFF");
+    root.style.setProperty("--khaki-yellow", "#FF6347");
+    root.style.setProperty("--powder-blue", "#FFD700");
+    root.style.setProperty("--lime-green", "#32CD32");
+    root.style.setProperty("--blue-violet", "#1090FF");
   }
 
   setMonochromeTheme() {
@@ -305,5 +345,10 @@ export class ThemeManager {
     root.style.setProperty("--sentiment-positive", "#666666");
     root.style.setProperty("--sentiment-negative", "#333333");
     root.style.setProperty("--sentiment-neutral", "#999999");
+    root.style.setProperty("--tomato-red", "#FFFFFF");
+    root.style.setProperty("--khaki-yellow", "#FF6347");
+    root.style.setProperty("--powder-blue", "#FFD700");
+    root.style.setProperty("--lime-green", "#00FFFF");
+    root.style.setProperty("--blue-violet", "#FF00FF:");
   }
 }

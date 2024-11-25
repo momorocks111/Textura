@@ -26,6 +26,13 @@
   --sentiment-negative: #f44336;
   --sentiment-neutral: #ffc107;
 
+  /* Theme Colors */
+  --tomato-red: #ff9898;
+  --khaki-yellow: #f0e68c;
+  --powder-blue: #b0e0e6;
+  --lime-green: #39f5ff;
+  --blue-violet: #ffadf7;
+
   /* Typography */
   --font-family: "Roboto", Arial, sans-serif;
   --font-size-small: 14px;
@@ -1186,13 +1193,11 @@ textarea:focus {
 
 .theme-bubble p {
   font-size: 14px;
-  color: var(--text-secondary);
 }
 
 .theme-bubble ul {
   list-style-type: none;
   padding-left: 0;
-  color: var(--text-secondary);
 }
 
 .sentiment-chart {

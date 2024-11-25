@@ -75,14 +75,14 @@ export class SummaryMode {
     const text = this.summarizationInput.value.trim();
     if (!this.validateText(text, "thematic analysis")) return;
 
-    // if (!isTextCoherent(text)) {
-    //   this.modalManager.showModal(
-    //     "Invalid Text",
-    //     "Please enter coherent text for analysis"
-    //   );
+    if (!this.isTextCoherent(text)) {
+      this.modalManager.showModal(
+        "Invalid Text",
+        "Please enter coherent text for analysis"
+      );
 
-    //   return;
-    // }
+      return;
+    }
 
     const thematicAnalyzer = new ThematicAnalyzer(text);
     const analysisResults = thematicAnalyzer.analyze();

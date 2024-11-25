@@ -476,7 +476,14 @@ export class ResultsRenderer {
 
   // Render Thematic Analysis
   renderThematicAnalysis(results) {
-    const themeColors = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A", "#98D8C8"];
+    // const themeColors = ["#FF6347", "#F0E68C", "#B0E0E6", "#32CD32", "#8A2BE2"];
+    const themeColors = [
+      "var(--tomato-red)",
+      "var(--khaki-yellow)",
+      "var(--powder-blue)",
+      "var(--lime-green)",
+      "var(--blue-violet)",
+    ];
 
     this.container.innerHTML = `
       <div class="thematic-analysis-results">
@@ -494,7 +501,6 @@ export class ResultsRenderer {
               </br>
               <ul>
                 ${theme.sentences
-                  .slice(0, 3) // Limit to 3 sentences
                   .map((sentence) => `<li>${sentence}</li>`)
                   .join("")}
               </ul>
