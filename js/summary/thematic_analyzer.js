@@ -12,30 +12,42 @@ export class ThematicAnalyzer {
     this.clustering = new KMeansClustering();
   }
 
-  analyze() {
+  analyze(minThemes = 3, maxThemes = 10) {
     const sentences = this.splitIntoSentences(this.text);
     const vectorizedSentences = this.vectorizer.fitTransform(sentences);
-    const clusters = this.clustering.fit(vectorizedSentences, 5);
 
-    const themes = this.extractThemes(clusters, sentences);
-    const sentimentScores = this.analyzeSentiment(sentences);
+    let bestThemes = null;
+    let bestScore = -Infinity;
+
+    for (let k = minThemes; k <= maxThemes; k++) {
+      const clusters = this.clustering.fit(vectorizedSentences, k);
+      const themes = this.extractThemes(clusters, sentences);
+      const score = this.evaluateThemes(themes);
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestThemes = themes;
+      }
+    }
 
     return {
-      themes,
-      sentimentScores,
+      themes: this.filterAndRankThemes(bestThemes),
+      sentimentScores: this.analyzeSentiment(sentences),
       wordCount: this.text.split(/\s+/).length,
     };
   }
 
   splitIntoSentences(text) {
-    return text.match(/[^.!?]+[.!?]+/g) || [];
+    return (
+      text.match(/[^.!?]+(?:[.!?](?!['"]?\s|$)[^.!?]*)*[.!?]?['"]?(?=\s|$)/g) ||
+      []
+    );
   }
 
   extractThemes(clusters, sentences) {
     const uniqueThemes = new Set();
     const clusterMap = new Map();
 
-    // Group sentences by cluster
     clusters.forEach((clusterIndex, sentenceIndex) => {
       if (!clusterMap.has(clusterIndex)) {
         clusterMap.set(clusterIndex, []);
@@ -47,8 +59,6 @@ export class ThematicAnalyzer {
       .map(([clusterIndex, sentenceIndices]) => {
         const clusterSentences = sentenceIndices.map((i) => sentences[i]);
         const keywords = this.vectorizer.getTopFeatures(clusterSentences, 5);
-
-        // Create a unique theme identifier based on keywords
         const themeIdentifier = keywords.join(",");
 
         if (!uniqueThemes.has(themeIdentifier)) {
@@ -56,11 +66,53 @@ export class ThematicAnalyzer {
           return {
             id: parseInt(clusterIndex) + 1,
             keywords,
-            sentences: clusterSentences,
+            sentences: this.summarizeSentences(clusterSentences),
+            score: this.calculateThemeScore(keywords, clusterSentences),
           };
         }
       })
-      .filter((theme) => theme !== undefined); // Filter out undefined themes
+      .filter((theme) => theme !== undefined)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 5);
+  }
+
+  summarizeSentences(sentences) {
+    if (sentences.length <= 3) return sentences;
+
+    // Select the first, middle, and last sentence
+    return [
+      sentences[0],
+      sentences[Math.floor(sentences.length / 2)],
+      sentences[sentences.length - 1],
+    ];
+  }
+
+  calculateThemeScore(keywords, sentences) {
+    const keywordFrequency = keywords.reduce((acc, keyword) => {
+      acc[keyword] = sentences.filter((s) =>
+        s.toLowerCase().includes(keyword)
+      ).length;
+      return acc;
+    }, {});
+
+    return (
+      Object.values(keywordFrequency).reduce((a, b) => a + b, 0) /
+      sentences.length
+    );
+  }
+
+  filterAndRankThemes(themes) {
+    return themes
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 5)
+      .map((theme, index) => ({ ...theme, id: index + 1 }));
+  }
+
+  evaluateThemes(themes) {
+    const uniqueKeywords = new Set(themes.flatMap((t) => t.keywords));
+    const averageSentences =
+      themes.reduce((acc, t) => acc + t.sentences.length, 0) / themes.length;
+    return uniqueKeywords.size * averageSentences;
   }
 
   analyzeSentiment(sentences) {
@@ -69,16 +121,24 @@ export class ThematicAnalyzer {
 
   calculateSentimentScore(sentence) {
     const words = sentence.toLowerCase().match(/\b\w+\b/g) || [];
-    let score = 0;
+    return words.reduce((score, word) => {
+      if (sentimentWords.positive[word]) score += sentimentWords.positive[word];
+      if (sentimentWords.negative[word]) score += sentimentWords.negative[word];
+      return score;
+    }, 0);
+  }
 
-    words.forEach((word) => {
-      if (sentimentWords.positive[word]) {
-        score += sentimentWords.positive[word];
-      } else if (sentimentWords.negative[word]) {
-        score += sentimentWords.negative[word];
-      }
-    });
+  calculateThemeScore(keywords, sentences) {
+    const keywordFrequency = keywords.reduce((acc, keyword) => {
+      acc[keyword] = sentences.filter((s) =>
+        s.toLowerCase().includes(keyword)
+      ).length;
+      return acc;
+    }, {});
 
-    return score;
+    return (
+      Object.values(keywordFrequency).reduce((a, b) => a + b, 0) /
+      sentences.length
+    );
   }
 }

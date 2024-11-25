@@ -490,9 +490,11 @@ export class ResultsRenderer {
               themeColors[index % themeColors.length]
             }">
               <h3>Theme ${theme.id}</h3>
-              <p>Keywords: ${theme.keywords.join(", ")}</p>
+              <p><strong>Keywords:</strong> ${theme.keywords.join(", ")}</p>
+              </br>
               <ul>
                 ${theme.sentences
+                  .slice(0, 3) // Limit to 3 sentences
                   .map((sentence) => `<li>${sentence}</li>`)
                   .join("")}
               </ul>
@@ -524,10 +526,10 @@ export class ResultsRenderer {
             }" y="${y}" width="${barWidth}" height="${height}" fill="${color}" />`;
           })
           .join("")}
-        <line x1="0" y1="${chartHeight / 2}" x2="${
+          <line x1="0" y1="${chartHeight / 2}" x2="${
       sentimentScores.length * barWidth
     }" y2="${chartHeight / 2}" stroke="black" />
-    </svg>
+      </svg>
     `;
 
     return svg;

@@ -1140,6 +1140,69 @@ textarea:focus {
   background-color: var(--success-clr);
 }
 
+/* THEMATIC ANALYSIS */
+.thematic-analysis-results {
+  font-family: "Arial", sans-serif;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.themes-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-block-start: 20px;
+}
+
+.themes-bubble {
+  background-color: var(--accent);
+  color: var(--white-clr);
+  padding: 10px;
+  border-radius: 15px;
+  width: calc(100% / 2 - 20px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.themes-bubble:hover,
+.theme-bubble:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.theme-bubble {
+  border-radius: 25px;
+  padding: 5px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.theme-bubble h3 {
+  margin-top: 0;
+}
+
+.theme-bubble p {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.theme-bubble ul {
+  list-style-type: none;
+  padding-left: 0;
+  color: var(--text-secondary);
+}
+
+.sentiment-chart {
+  margin-top: 30px;
+}
+
+.sentiment-chart svg {
+  width: calc(100% - 10px);
+}
+
 /*====================================
 ============ KEYWORD MODE ============
 ====================================*/
@@ -1499,6 +1562,25 @@ textarea:focus {
     height: 35px;
     font-size: 1.1rem;
   }
+
+  /* Thematic Analysis */
+  .themes-container {
+    gap: 15px;
+  }
+
+  .theme-bubble {
+    width: calc(100% / 3 - 20px);
+    height: fit-content;
+    padding: 15px;
+  }
+
+  .theme-bubble p {
+    font-size: 16px;
+  }
+
+  .sentiment-chart svg {
+    width: auto;
+  }
 }
 
 /* Desktop view */
@@ -1747,5 +1829,30 @@ textarea:focus {
     width: 40px;
     height: 40px;
     font-size: 1.2rem;
+  }
+
+  /* Thematic Analysis */
+  .thematic-analysis-results {
+    padding: 25px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .themes-container {
+    gap: 20px;
+  }
+
+  .theme-bubble {
+    width: auto;
+    padding: 20px;
+  }
+
+  .theme-bubble p {
+    font-size: 18px;
+  }
+
+  .theme-bubble li {
+    font-size: 16px;
   }
 }
