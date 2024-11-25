@@ -220,8 +220,7 @@ export class ResultsRenderer {
   }
 
   /**
-   * For Stylometry Analysis
-   * @param {any} metrics
+   * Stylometry Analysis
    */
   renderMetrics(metrics) {
     return `
@@ -539,5 +538,90 @@ export class ResultsRenderer {
     `;
 
     return svg;
+  }
+
+  // Render Headline Generation
+  renderHeadlines(headlines, callbacks) {
+    const headlinesHTML = headlines
+      .map(
+        (headline, index) => `
+      <div class="headline-option" data-index="${index}">
+        <h3>Option ${index + 1}</h3>
+        <p>${headline}</p>
+        <div class="headline-btn-container">
+          <button class="edit-headline-btn">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="select-headline-btn">
+            <i class="fas fa-check"></i>
+          </button>
+        </div>
+      </div>
+    `
+      )
+      .join("");
+
+    this.container.innerHTML = `
+    <div class="headline-results">
+      <h2>Generated Headlines</h2>
+      ${headlinesHTML}
+      <button id="regenerateHeadlinesBtn">
+        <i class="fas fa-sync-alt"></i> Regenerate Headlines
+      </button>
+    </div>
+  `;
+
+    this.addHeadlineInteractivity(callbacks);
+  }
+
+  addHeadlineInteractivity(callbacks) {
+    this.container.querySelectorAll(".edit-headline-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const index = e.target.closest(".headline-option").dataset.index;
+        this.editHeadline(index);
+      });
+    });
+
+    this.container.querySelectorAll(".select-headline-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const index = e.target.closest(".headline-option").dataset.index;
+        const selectedHeadline =
+          this.container.querySelectorAll(".headline-option p")[index]
+            .textContent;
+        callbacks.selectCallback(selectedHeadline);
+      });
+    });
+
+    const regenerateBtn = this.container.querySelector(
+      "#regenerateHeadlinesBtn"
+    );
+    regenerateBtn.addEventListener("click", callbacks.regenerateCallback);
+  }
+
+  editHeadline(index) {
+    const headlineElement =
+      this.container.querySelectorAll(".headline-option p")[index];
+    const currentHeadline = headlineElement.textContent;
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = currentHeadline;
+    input.classList.add("edit-headline-input");
+
+    headlineElement.replaceWith(input);
+    input.focus();
+
+    input.addEventListener("blur", () => {
+      const newHeadline = input.value.trim();
+      const p = document.createElement("p");
+      p.textContent = newHeadline;
+      input.replaceWith(p);
+    });
+
+    input.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        input.blur();
+      }
+    });
   }
 }

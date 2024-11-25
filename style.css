@@ -1208,6 +1208,71 @@ textarea:focus {
   width: calc(100% - 10px);
 }
 
+/* Headline Generation */
+.headline-results {
+  background-color: var(--bg-secondary);
+  padding: 20px;
+  border-radius: 8px;
+  margin-block-start: 1.25rem;
+}
+
+.headline-results h2 {
+  color: var(--white-clr);
+  font-size: 24px;
+  text-align: center;
+}
+
+.headline-option {
+  background-color: var(--result-bg);
+  border: 1px solid var(--result-border);
+  padding: 15px;
+  margin-block-end: 15px;
+  border-radius: 4px;
+}
+
+.headline-option h3 {
+  color: var(--text-primary);
+  margin-block-start: 0;
+}
+
+.headline-option p {
+  color: var(--white-clr);
+  font-size: 16px;
+}
+
+.headline-btn-container {
+  margin-block-start: 0.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.edit-headline-btn,
+.select-headline-btn {
+  background-color: var(--accent);
+  color: var(--bg-primary);
+  border: none;
+  padding: 5px 10px;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.edit-headline-input {
+  width: calc(100% - 20px);
+  font-size: 18px;
+  padding: 5px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+}
+
+#regenerateHeadlinesBtn {
+  background-color: var(--accent-light);
+  color: var(--bg-primary);
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
 /*====================================
 ============ KEYWORD MODE ============
 ====================================*/

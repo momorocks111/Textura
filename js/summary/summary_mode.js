@@ -6,6 +6,9 @@ import { ModalManager } from "../utils/modal_manager.js";
 import { Summarizer } from "./summarizer.js";
 import { Paraphraser } from "./paraphraser.js";
 import { ThematicAnalyzer } from "./thematic_analyzer.js";
+import { stopWords } from "../archive/stop_words.js";
+import { sentimentLexicon } from "../archive/sentiment_lexicon.js";
+import { HeadlineGenerator } from "./headline_generator.js";
 
 export class SummaryMode {
   constructor() {
@@ -92,6 +95,31 @@ export class SummaryMode {
   handleHeadlineGeneration() {
     const text = this.summarizationInput.value.trim();
     if (!this.validateText(text, "generate headlines")) return;
+
+    if (!this.isTextCoherent(text)) {
+      this.modalManager.showModal(
+        "Invalid Text",
+        "Please enter coherent text for analysis"
+      );
+      return;
+    }
+
+    const headlineGenerator = new HeadlineGenerator(
+      text,
+      stopWords,
+      sentimentLexicon
+    );
+    const headlines = headlineGenerator.generate();
+
+    this.resultsRenderer.renderHeadlines(headlines, {
+      regenerateCallback: this.handleHeadlineGeneration.bind(this),
+      selectCallback: (selectedHeadline) => {
+        this.modalManager.showModal(
+          "Selected Headline",
+          `You've chosen: "${selectedHeadline}"`
+        );
+      },
+    });
   }
 
   validateText(text, message) {
