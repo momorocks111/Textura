@@ -1,5 +1,7 @@
 "use strict";
 
+import { headlineTemplates } from "../archive/headline_templates.js";
+
 export class HeadlineGenerator {
   constructor(text, stopWords, sentimentLexicon) {
     this.text = text;
@@ -42,49 +44,54 @@ export class HeadlineGenerator {
   }
 
   generate() {
-    return [
+    const allHeadlines = [
       ...this.generateQuestionHeadlines(),
       ...this.generateHowToHeadlines(),
       ...this.generateListHeadlines(),
       ...this.generateEmotionalHeadlines(),
     ];
+
+    // Shuffle and select five random headlines
+    return this.getRandomSubset(allHeadlines, 5);
+  }
+
+  getRandomSubset(array, size) {
+    const shuffled = array.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, size);
   }
 
   generateQuestionHeadlines() {
-    const questions = [
-      `Why is ${this.keywords[0]} the talk of the town?`,
-      `How does ${this.keywords[0]} impact ${this.keywords[1]}?`,
-      `What's the secret behind ${this.keywords[0]}?`,
-    ];
-    return questions;
+    return headlineTemplates.questions.map((template) =>
+      template
+        .replace("{keyword1}", this.keywords[0])
+        .replace("{keyword2}", this.keywords[1])
+    );
   }
 
   generateHowToHeadlines() {
-    return [
-      `How to Master ${this.keywords[0]} and Boost Your ${this.keywords[1]}`,
-    ];
+    return headlineTemplates.howTo.map((template) =>
+      template
+        .replace("{keyword1}", this.keywords[0])
+        .replace("{keyword2}", this.keywords[1])
+    );
   }
 
   generateListHeadlines() {
     const number = Math.floor(Math.random() * 7) + 3;
-    return [
-      `${number} Surprising Facts About ${this.keywords[0]} You Didn't Know`,
-    ];
+    return headlineTemplates.lists.map((template) =>
+      template
+        .replace("{number}", number)
+        .replace("{keyword1}", this.keywords[0])
+        .replace("{keyword2}", this.keywords[1])
+    );
   }
 
   generateEmotionalHeadlines() {
-    const emotionalWords = {
-      positive: ["Amazing", "Incredible", "Inspiring"],
-      negative: ["Shocking", "Alarming", "Controversial"],
-      neutral: ["Unexpected", "Intriguing", "Thought-Provoking"],
-    };
-
-    const emotion =
-      emotionalWords[this.sentiment][
-        Math.floor(Math.random() * emotionalWords[this.sentiment].length)
-      ];
-    return [
-      `The ${emotion} Truth About ${this.keywords[0]} and ${this.keywords[1]}`,
-    ];
+    const templates = headlineTemplates.emotional[this.sentiment];
+    return templates.map((template) =>
+      template
+        .replace("{keyword1}", this.keywords[0])
+        .replace("{keyword2}", this.keywords[1])
+    );
   }
 }
