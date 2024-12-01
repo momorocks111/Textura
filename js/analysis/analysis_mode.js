@@ -1,7 +1,7 @@
 "use strict";
 
 import { ModalManager } from "../utils/modal_manager.js";
-import { StoryGenerator } from "./story_generator.js";
+import { EnhancedStoryGenerator } from "./enhanced_story_generator.js";
 
 export class AnalysisMode {
   constructor() {
@@ -53,7 +53,6 @@ export class AnalysisMode {
         "No Text",
         "Please enter text to generate new content"
       );
-
       return;
     }
 
@@ -65,10 +64,16 @@ export class AnalysisMode {
       return;
     }
 
-    const storyGenerator = new StoryGenerator(text);
-    const generatedStory = storyGenerator.generateStory();
-
-    this.displayGeneratedStory(generatedStory);
+    try {
+      const generator = new EnhancedStoryGenerator(text);
+      const generatedStory = generator.generateStory();
+      this.displayGeneratedStory(generatedStory);
+    } catch (error) {
+      this.modalManager.showModal(
+        "Error",
+        "An error occurred during story generation: " + error.message
+      );
+    }
   }
 
   displayGeneratedText(generatedText) {
