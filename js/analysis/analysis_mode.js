@@ -1,7 +1,8 @@
 "use strict";
 
 import { ModalManager } from "../utils/modal_manager.js";
-import { EnhancedStoryGenerator } from "./enhanced_story_generator.js";
+import { StoryTextAnalyzer } from "./story_text_analyzer.js";
+import { StoryGenerator } from "./story_generator.js";
 
 export class AnalysisMode {
   constructor() {
@@ -15,6 +16,8 @@ export class AnalysisMode {
     );
     this.translationButton = document.getElementById("translationButton");
     this.clusteringButton = document.getElementById("clusteringButton");
+    this.analyzer = new StoryTextAnalyzer();
+    this.generator = new StoryGenerator();
 
     // Utils
     this.modalManager = new ModalManager();
@@ -64,16 +67,9 @@ export class AnalysisMode {
       return;
     }
 
-    try {
-      const generator = new EnhancedStoryGenerator(text);
-      const generatedStory = generator.generateStory();
-      this.displayGeneratedStory(generatedStory);
-    } catch (error) {
-      this.modalManager.showModal(
-        "Error",
-        "An error occurred during story generation: " + error.message
-      );
-    }
+    const analysis = this.analyzer.analyzeText(text);
+    const generatedStory = this.generator.generateStory(analysis);
+    this.displayGeneratedStory([generatedStory]);
   }
 
   displayGeneratedText(generatedText) {
