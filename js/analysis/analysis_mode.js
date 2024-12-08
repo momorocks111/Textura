@@ -113,20 +113,35 @@ export class AnalysisMode {
     this.addCopyButtonListeners();
   }
 
+  createToast() {
+    const toast = document.createElement("div");
+    toast.className = "text-transformer__toast";
+    toast.textContent = "Copied to clipboard";
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.classList.add("text-transformer__toast--visible");
+      setTimeout(() => {
+        toast.classList.remove("text-transformer__toast--visible");
+        setTimeout(() => {
+          document.body.removeChild(toast);
+        }, 300);
+      }, 1000);
+    }, 100);
+  }
+
   addCopyButtonListeners() {
     const copyButtons = this.analysisResults.querySelectorAll(
       ".text-transformer__copy-button"
     );
-
     copyButtons.forEach((button) => {
       button.addEventListener("click", () => {
         const content = button.getAttribute("data-content");
-
         navigator.clipboard.writeText(content).then(() => {
           const icon = button.querySelector(".text-transformer__copy-icon");
           icon.classList.remove("fa-copy");
           icon.classList.add("fa-check");
-
+          this.createToast();
           setTimeout(() => {
             icon.classList.remove("fa-check");
             icon.classList.add("fa-copy");

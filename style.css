@@ -1368,6 +1368,31 @@ textarea:focus {
   cursor: pointer;
 }
 
+/* DISPLAY TOAST */
+.text-transformer__toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background-color: var(--accent);
+  color: var(--white-clr);
+  padding: 12px 24px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  z-index: 1000;
+}
+
+.text-transformer__toast--visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.text-transformer__toast {
+  width: 90%;
+  text-align: center;
+}
+
 /*====================================
 ========== THEME SELECTOR ============
 ====================================*/
@@ -1786,6 +1811,11 @@ textarea:focus {
   .text-transformer__button {
     flex: 1 1 calc(50% - 0.5rem);
   }
+
+  /* DISPLAY TOAST */
+  .text-transformer__toast {
+    width: 60%;
+  }
 }
 
 /* Desktop view */
@@ -2117,5 +2147,10 @@ textarea:focus {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1rem;
+  }
+
+  /* Display Toast */
+  .text-transformer__toast {
+    width: 300px;
   }
 }
