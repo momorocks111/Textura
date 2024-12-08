@@ -1,23 +1,17 @@
 "use strict";
 
 import { ModalManager } from "../utils/modal_manager.js";
-import { StoryTextAnalyzer } from "./story_text_analyzer.js";
-import { StoryGenerator } from "./story_generator.js";
 
 export class AnalysisMode {
   constructor() {
     this.textArea = document.getElementById("analysisInput");
     this.analysisResults = document.querySelector(".analysisResults");
-    this.storyGenerationButton = document.getElementById(
-      "storyGenerationButton"
-    );
+    this.transfromTextButton = document.getElementById("transfromTextButton");
     this.keywordSuggestionsButton = document.getElementById(
       "keywordSuggestionsButton"
     );
     this.translationButton = document.getElementById("translationButton");
     this.clusteringButton = document.getElementById("clusteringButton");
-    this.analyzer = new StoryTextAnalyzer();
-    this.generator = new StoryGenerator();
 
     // Utils
     this.modalManager = new ModalManager();
@@ -30,9 +24,9 @@ export class AnalysisMode {
   }
 
   addEventListeners() {
-    this.storyGenerationButton.addEventListener(
+    this.transfromTextButton.addEventListener(
       "click",
-      this.handleStoryGeneration.bind(this)
+      this.handleTransfromText.bind(this)
     );
     this.keywordSuggestionsButton.addEventListener(
       "click",
@@ -48,7 +42,7 @@ export class AnalysisMode {
     );
   }
 
-  handleStoryGeneration() {
+  handleTransfromText() {
     const text = this.textArea.value.trim();
 
     if (!text) {
@@ -62,14 +56,10 @@ export class AnalysisMode {
     if (text.split(/\s+/).length < 30) {
       this.modalManager.showModal(
         "Insufficient Text",
-        "Please enter at least 30 words for a proper story generation"
+        "Please enter at least 30 words for a proper text transformation"
       );
       return;
     }
-
-    const analysis = this.analyzer.analyzeText(text);
-    const generatedStory = this.generator.generateStory(analysis);
-    this.displayGeneratedStory([generatedStory]);
   }
 
   displayGeneratedText(generatedText) {
@@ -98,12 +88,5 @@ export class AnalysisMode {
     // Simple coherence check (can be improved with more sophisticated NLP techniques)
     const uniqueWords = new Set(words.map((word) => word.toLowerCase()));
     return uniqueWords.size / words.length > 0.4; // Arbitrary threshold
-  }
-
-  displayGeneratedStory(story) {
-    this.analysisResults.innerHTML = `
-      <h2>Generated Story</h2>
-      <p>${story}</p>
-    `;
   }
 }
