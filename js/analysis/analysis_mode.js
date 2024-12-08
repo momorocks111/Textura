@@ -1,6 +1,7 @@
 "use strict";
 
 import { ModalManager } from "../utils/modal_manager.js";
+import { TextTransformer } from "./text_transformer.js";
 
 export class AnalysisMode {
   constructor() {
@@ -12,6 +13,9 @@ export class AnalysisMode {
     );
     this.translationButton = document.getElementById("translationButton");
     this.clusteringButton = document.getElementById("clusteringButton");
+
+    // Classes
+    this.textTransformer = new TextTransformer();
 
     // Utils
     this.modalManager = new ModalManager();
@@ -60,13 +64,9 @@ export class AnalysisMode {
       );
       return;
     }
-  }
 
-  displayGeneratedText(generatedText) {
-    this.analysisResults.innerHTML = `
-      <h2>Generated Text</h2>
-      <p>${generatedText.join("<br>")}</p>
-    `;
+    const transformedResults = this.textTransformer.transformText(text);
+    this.displayTransformedResults(transformedResults);
   }
 
   handleKeywordSuggestion() {
@@ -89,4 +89,29 @@ export class AnalysisMode {
     const uniqueWords = new Set(words.map((word) => word.toLowerCase()));
     return uniqueWords.size / words.length > 0.4; // Arbitrary threshold
   }
+
+  // Results Renderer
+  displayTransformedResults(results) {
+    let html = '<div class="text-transformer__results">';
+
+    results.forEach(({ name, result }) => {
+      html += `
+        <div class="text-transformer__result-section">
+          <h3 class="text-transformer__result-title">${name}</h3>
+          <button class="text-transformer__copy-button" data-content="${result}">
+            <i class="fas fa-copy text-transformer__copy-icon"></i>
+          </button>
+          <p class="text-transformer__result-content">${result}</p>
+        </div>
+      `;
+    });
+
+    html += "</div>";
+
+    this.analysisResults.innerHTML = html;
+
+    this.addCopyButtonListeners();
+  }
+
+  addCopyButtonListeners() {}
 }
