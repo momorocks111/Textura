@@ -113,5 +113,26 @@ export class AnalysisMode {
     this.addCopyButtonListeners();
   }
 
-  addCopyButtonListeners() {}
+  addCopyButtonListeners() {
+    const copyButtons = this.analysisResults.querySelectorAll(
+      ".text-transformer__copy-button"
+    );
+
+    copyButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const content = button.getAttribute("data-content");
+
+        navigator.clipboard.writeText(content).then(() => {
+          const icon = button.querySelector(".text-transformer__copy-icon");
+          icon.classList.remove("fa-copy");
+          icon.classList.add("fa-check");
+
+          setTimeout(() => {
+            icon.classList.remove("fa-check");
+            icon.classList.add("fa-copy");
+          }, 3000);
+        });
+      });
+    });
+  }
 }
