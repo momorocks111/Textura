@@ -219,13 +219,13 @@ export class AnalysisMode {
     html += relatedKeywords
       .map(
         (item) => `
-              <div class="related-keywords__item">
-                <span class="related-keyword__original">${item.original}</span>
-                <span class="related-keyword__suggestions">${item.related.join(
-                  ", "
-                )}</span>
-              </div>
-            `
+             <div class="related-keywords__item">
+               <span class="related-keyword__original">${item.original}</span>
+               <span class="related-keyword__suggestions">${item.related.join(
+                 ", "
+               )}</span>
+             </div>
+           `
       )
       .join("");
 
@@ -243,39 +243,7 @@ export class AnalysisMode {
     this.addEventListenersToKeywords(analysis.keywords);
   }
 
-  generateRelatedKeywordsHTML(relatedKeywords) {
-    return relatedKeywords
-      .map(
-        (item) => `
-        <div class="related-keywords__item">
-          <span class="related-keyword__original">${item.original}</span>
-          <span class="related-keyword__suggestions">${item.related.join(
-            ","
-          )}</span>
-        </div>
-    `
-      )
-      .join("");
-  }
-
-  addKeywordEventListeners(keywords) {
-    const wordElements = this.analysisResults.querySelectorAll(
-      ".keyword-suggestion__word"
-    );
-    wordElements.forEach((element) => {
-      element.addEventListener("click", () => {
-        const keyword = element.textContent;
-        this.highlightKeywordInText(keyword);
-      });
-    });
-
-    const filterInputs = this.analysisResults.querySelectorAll(
-      ".keyword-suggestion__filters input"
-    );
-    filterInputs.forEach((input) => {
-      input.addEventListener("change", () => this.filterKeywords());
-    });
-
+  addEventListenersToKeywords(keywords) {
     const copyButtons = this.analysisResults.querySelectorAll(
       ".keyword-suggestion__copy"
     );
@@ -283,7 +251,7 @@ export class AnalysisMode {
       button.addEventListener("click", () => {
         const keyword = button.getAttribute("data-keyword");
         navigator.clipboard.writeText(keyword);
-        this.createToast(`Keyword "${keyword}" copied to clipboard`);
+        alert(`Copied "${keyword}" to clipboard!`);
       });
     });
 
@@ -293,7 +261,30 @@ export class AnalysisMode {
     copyAllButton.addEventListener("click", () => {
       const allKeywords = keywords.map((k) => k.word).join(", ");
       navigator.clipboard.writeText(allKeywords);
-      this.createToast("All keywords copied to clipboard");
+      alert("All keywords copied to clipboard!");
+    });
+
+    const filterInputs = this.analysisResults.querySelectorAll(
+      ".keyword-suggestion__filters input"
+    );
+    filterInputs.forEach((input) => {
+      input.addEventListener("change", () => this.filterKeywords());
+    });
+  }
+
+  filterKeywords() {
+    const checkedPOS = Array.from(
+      this.analysisResults.querySelectorAll(
+        ".keyword-suggestion__filters input:checked"
+      )
+    ).map((input) => input.value);
+
+    const keywordItems = this.analysisResults.querySelectorAll(
+      ".keyword-suggestion__item"
+    );
+    keywordItems.forEach((item) => {
+      const pos = item.querySelector(".keyword-suggestion__pos").textContent;
+      item.style.display = checkedPOS.includes(pos) ? "block" : "none";
     });
   }
 
@@ -305,7 +296,7 @@ export class AnalysisMode {
 
     textElement.innerHTML = textElement.textContent.replace(
       regex,
-      (match) => `<span class="keyword-highlight">${match}</span>`
+      (match) => `<span class="highlighted-keyword">${match}</span>`
     );
   }
 
