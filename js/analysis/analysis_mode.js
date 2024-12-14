@@ -174,46 +174,73 @@ export class AnalysisMode {
       ============================= */
   displayKeywordResults(analysis, relatedKeywords) {
     let html = '<div class="keyword-suggestion__results">';
+
+    // Display top keywords with scores and POS
     html += '<div class="keyword-suggestion__list">';
 
     analysis.keywords.forEach((keyword) => {
       html += `
-        <div class="keyword-suggestion__item">
-          <span class="keyword-suggestion__word">${keyword.word}</span>
-          <span class="keyword-suggestion__score">${keyword.score}</span>
-          <span class="keyword-suggestion__pos">${keyword.pos}</span>
-          ${this.keywordVisualizer.generateScoreBar(keyword.score)}
-          <button class="keyword-suggestion__copy" data-keyword=${
-            keyword.word
-          }>Copy</button>
-        </div>
-      `;
+            <div class="keyword-suggestion__item">
+              <span class="keyword-suggestion__word">${keyword.word}</span>
+              <span class="keyword-suggestion__score">${keyword.score}</span>
+              <span class="keyword-suggestion__pos">${keyword.pos}</span>
+              ${this.keywordVisualizer.generateScoreBar(keyword.score)}
+              <button class="keyword-suggestion__copy" data-keyword="${
+                keyword.word
+              }">Copy</button>
+            </div>
+          `;
     });
+
     html += "</div>";
 
+    // Display filters for parts of speech
     html += '<div class="keyword-suggestion__filters">';
+
     html += `
-      <label><input type="checkbox" value="noun" checked> Nouns</label>
-      <label><input type="checkbox" value="verb" checked> Verbs</label>
-      <label><input type="checkbox" value="adjective" checked> Adjectives</label>
-      <label><input type="checkbox" value="other" checked> Other</label>
-    `;
+          <label><input type="checkbox" value="noun" checked> Nouns</label>
+          <label><input type="checkbox" value="verb" checked> Verbs</label>
+          <label><input type="checkbox" value="adjective" checked> Adjectives</label>
+          <label><input type="checkbox" value="other" checked> Other</label>
+        `;
+
     html += "</div>";
 
+    // Display word cloud
     html += '<div class="keyword-suggestion__word-cloud">';
+
     html += this.keywordVisualizer.generateWordCloud(analysis.keywords);
+
     html += "</div>";
 
+    // Display related keywords
     html += '<div class="keyword-suggestion__related">';
-    html += this.generateRelatedKeywordsHTML(relatedKeywords);
+
+    html += relatedKeywords
+      .map(
+        (item) => `
+              <div class="related-keywords__item">
+                <span class="related-keyword__original">${item.original}</span>
+                <span class="related-keyword__suggestions">${item.related.join(
+                  ", "
+                )}</span>
+              </div>
+            `
+      )
+      .join("");
+
     html += "</div>";
 
+    // Copy all button and original text
     html += `<button class="keyword-suggestion__copy-all">Copy All Keywords</button>`;
+
     html += `<div class="keyword-suggestion__original-text">${analysis.originalText}</div>`;
+
     html += "</div>";
 
     this.analysisResults.innerHTML = html;
-    this.addEventListeners(analysis.keywords);
+
+    this.addEventListenersToKeywords(analysis.keywords);
   }
 
   generateRelatedKeywordsHTML(relatedKeywords) {
@@ -235,7 +262,6 @@ export class AnalysisMode {
     const wordElements = this.analysisResults.querySelectorAll(
       ".keyword-suggestion__word"
     );
-
     wordElements.forEach((element) => {
       element.addEventListener("click", () => {
         const keyword = element.textContent;
@@ -257,7 +283,7 @@ export class AnalysisMode {
       button.addEventListener("click", () => {
         const keyword = button.getAttribute("data-keyword");
         navigator.clipboard.writeText(keyword);
-        this.createToast("Keyword copied to clipboard");
+        this.createToast(`Keyword "${keyword}" copied to clipboard`);
       });
     });
 
@@ -298,5 +324,21 @@ export class AnalysisMode {
       const pos = item.querySelector(".keyword-suggestion__pos").textContent;
       item.style.display = checkedPOS.includes(pos) ? "block" : "none";
     });
+  }
+
+  addEventListenersToKeywords(keywords) {
+    const copyButtons = this.analysisResults.querySelectorAll(
+      ".keyword-suggestion__copy"
+    );
+
+    copyButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const keyword = button.getAttribute("data-keyword");
+        navigator.clipboard.writeText(keyword);
+        this.createToast("Keyword copied to clipboard");
+      });
+    });
+
+    // Add more event listeners for filtering or highlighting as needed
   }
 }
