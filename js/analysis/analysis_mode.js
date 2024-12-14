@@ -2,6 +2,8 @@
 
 import { ModalManager } from "../utils/modal_manager.js";
 import { TextTransformer } from "./text_transformer.js";
+import { KeywordAnalyzer } from "./keyword_analyzer.js";
+import { KeywordVisualizer } from "./keyword_visualizer.js";
 
 export class AnalysisMode {
   constructor() {
@@ -16,6 +18,8 @@ export class AnalysisMode {
 
     // Classes
     this.textTransformer = new TextTransformer();
+    this.keywordAnalyzer = new KeywordAnalyzer();
+    this.keywordVisualizer = new KeywordVisualizer();
 
     // Utils
     this.modalManager = new ModalManager();
@@ -70,7 +74,21 @@ export class AnalysisMode {
   }
 
   handleKeywordSuggestion() {
-    console.log("Keyword Suggestions feature not yet implemented");
+    const text = this.textArea.value.trim();
+
+    if (!text) {
+      this.modalManager.showModal(
+        "No Text",
+        "Please enter text for keyword suggestion"
+      );
+      return;
+    }
+
+    const analysis = this.keywordAnalyzer.analyzeKeywords(text);
+    const relatedKeywords = this.keywordAnalyzer.suggestRelatedKeywords(
+      analysis.keywords
+    );
+    this.displayKeywordResults(analysis, relatedKeywords);
   }
 
   handleTranslationModel() {
@@ -148,6 +166,137 @@ export class AnalysisMode {
           }, 3000);
         });
       });
+    });
+  }
+
+  /** =============================
+      ======Suggest Keywords======= 
+      ============================= */
+  displayKeywordResults(analysis, relatedKeywords) {
+    let html = '<div class="keyword-suggestion__results">';
+    html += '<div class="keyword-suggestion__list">';
+
+    analysis.keywords.forEach((keyword) => {
+      html += `
+        <div class="keyword-suggestion__item">
+          <span class="keyword-suggestion__word">${keyword.word}</span>
+          <span class="keyword-suggestion__score">${keyword.score}</span>
+          <span class="keyword-suggestion__pos">${keyword.pos}</span>
+          ${this.keywordVisualizer.generateScoreBar(keyword.score)}
+          <button class="keyword-suggestion__copy" data-keyword=${
+            keyword.word
+          }>Copy</button>
+        </div>
+      `;
+    });
+    html += "</div>";
+
+    html += '<div class="keyword-suggestion__filters">';
+    html += `
+      <label><input type="checkbox" value="noun" checked> Nouns</label>
+      <label><input type="checkbox" value="verb" checked> Verbs</label>
+      <label><input type="checkbox" value="adjective" checked> Adjectives</label>
+      <label><input type="checkbox" value="other" checked> Other</label>
+    `;
+    html += "</div>";
+
+    html += '<div class="keyword-suggestion__word-cloud">';
+    html += this.keywordVisualizer.generateWordCloud(analysis.keywords);
+    html += "</div>";
+
+    html += '<div class="keyword-suggestion__related">';
+    html += this.generateRelatedKeywordsHTML(relatedKeywords);
+    html += "</div>";
+
+    html += `<button class="keyword-suggestion__copy-all">Copy All Keywords</button>`;
+    html += `<div class="keyword-suggestion__original-text">${analysis.originalText}</div>`;
+    html += "</div>";
+
+    this.analysisResults.innerHTML = html;
+    this.addEventListeners(analysis.keywords);
+  }
+
+  generateRelatedKeywordsHTML(relatedKeywords) {
+    return relatedKeywords
+      .map(
+        (item) => `
+        <div class="related-keywords__item">
+          <span class="related-keyword__original">${item.original}</span>
+          <span class="related-keyword__suggestions">${item.related.join(
+            ","
+          )}</span>
+        </div>
+    `
+      )
+      .join("");
+  }
+
+  addKeywordEventListeners(keywords) {
+    const wordElements = this.analysisResults.querySelectorAll(
+      ".keyword-suggestion__word"
+    );
+
+    wordElements.forEach((element) => {
+      element.addEventListener("click", () => {
+        const keyword = element.textContent;
+        this.highlightKeywordInText(keyword);
+      });
+    });
+
+    const filterInputs = this.analysisResults.querySelectorAll(
+      ".keyword-suggestion__filters input"
+    );
+    filterInputs.forEach((input) => {
+      input.addEventListener("change", () => this.filterKeywords());
+    });
+
+    const copyButtons = this.analysisResults.querySelectorAll(
+      ".keyword-suggestion__copy"
+    );
+    copyButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const keyword = button.getAttribute("data-keyword");
+        navigator.clipboard.writeText(keyword);
+        this.createToast("Keyword copied to clipboard");
+      });
+    });
+
+    const copyAllButton = this.analysisResults.querySelector(
+      ".keyword-suggestion__copy-all"
+    );
+    copyAllButton.addEventListener("click", () => {
+      const allKeywords = keywords.map((k) => k.word).join(", ");
+      navigator.clipboard.writeText(allKeywords);
+      this.createToast("All keywords copied to clipboard");
+    });
+  }
+
+  highlightKeywordInText(keyword) {
+    const textElement = this.analysisResults.querySelector(
+      ".keyword-suggestion__original-text"
+    );
+    const regex = new RegExp(`\\b${keyword}\\b`, "gi");
+
+    textElement.innerHTML = textElement.textContent.replace(
+      regex,
+      (match) => `<span class="keyword-highlight">${match}</span>`
+    );
+  }
+
+  filterKeywords() {
+    const checkedPOS = Array.from(
+      this.analysisResults.querySelectorAll(
+        ".keywords-suggestion__filters input::checked"
+      )
+    ).map((input) => input.value);
+
+    const keyWordItems = this.analysisResults.querySelectorAll(
+      ".keyword-suggestion__item"
+    );
+
+    keyWordItems.forEach((item) => {
+      const pos = item.querySelector(".keyword-suggestion__pos").textContent;
+      item.style.display = checkedPOS.includes(pos) ? "block" : "none";
     });
   }
 }
