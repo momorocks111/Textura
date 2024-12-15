@@ -105,6 +105,13 @@ export class AnalysisMode {
       );
       return;
     }
+
+    this.showLoadingScreen();
+
+    setTimeout(() => {
+      this.hideLoadingScreen();
+      this.displayAnalysisResults(text);
+    }, 3000);
   }
 
   handleClusterSentences() {
@@ -343,5 +350,66 @@ export class AnalysisMode {
     });
 
     // Add more event listeners for filtering or highlighting as needed
+  }
+
+  /** ===============================================================================================================================
+      ======================================================TRAIN MODEs============================================================== 
+      =============================================================================================================================== */
+  showLoadingScreen() {
+    const loadingHTML = `
+      <div class="neural-analysis__loading">
+        <div class="neural-analysis__spinner"></div>
+        <p>Analyzing text and training model...</p>
+      </div>
+    `;
+
+    this.analysisResults.innerHTML = loadingHTML;
+  }
+
+  hideLoadingScreen() {
+    const loadingElement = document.querySelector(".neural-analysis__loading");
+    if (loadingElement) {
+      loadingElement.remove();
+    }
+  }
+
+  displayAnalysisResults(originalText) {
+    let html = '<div class="neural-analysis__results">';
+    html += "<h3>Text Analysis Complete</h3>";
+    html +=
+      "<p>The model has analyzed the text. Select a transformation option:</p>";
+    html += '<div class="neural-analysis__buttons">';
+    html +=
+      '<button class="neural-analysis__button" data-transform="tone">Change Tone</button>';
+    html +=
+      '<button class="neural-analysis__button" data-transform="sentiment">Alter Sentiment</button>';
+    html +=
+      '<button class="neural-analysis__button" data-transform="formality">Adjust Formality</button>';
+    html +=
+      '<button class="neural-analysis__button" data-transform="genre">Transform Genre</button>';
+    html += "</div>";
+    html += '<div class="neural-analysis__original-text">';
+    html += "<h4>Original Text:</h4>";
+    html += `<p>${originalText}</p>`;
+    html += "</div>";
+    html += '<div class="neural-analysis__transformed-text"></div>';
+    html += "</div>";
+
+    this.analysisResults.innerHTML = html;
+    this.addTransformationEventListeners();
+  }
+
+  addTransformationEventListeners() {
+    const buttons = document.querySelectorAll(".neural-analysis__button");
+    buttons.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        const transformType = e.target.dataset.transform;
+        this.handleTransfromation(transformType);
+      });
+    });
+  }
+
+  handleTransfromation(transformType) {
+    console.log(`Transformation type: ${transformType}`);
   }
 }
