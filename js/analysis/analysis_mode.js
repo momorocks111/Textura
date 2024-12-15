@@ -4,7 +4,6 @@ import { ModalManager } from "../utils/modal_manager.js";
 import { TextTransformer } from "./text_transformer.js";
 import { KeywordAnalyzer } from "./keyword_analyzer.js";
 import { KeywordVisualizer } from "./keyword_visualizer.js";
-import { TranslationModel } from "./translation_model.js";
 
 export class AnalysisMode {
   constructor() {
@@ -21,7 +20,6 @@ export class AnalysisMode {
     this.textTransformer = new TextTransformer();
     this.keywordAnalyzer = new KeywordAnalyzer();
     this.keywordVisualizer = new KeywordVisualizer();
-    this.translationModel = null;
 
     // Utils
     this.modalManager = new ModalManager();
@@ -107,34 +105,10 @@ export class AnalysisMode {
       );
       return;
     }
-
-    const [sourceSentences, targetSentences] = this.preprocessText(text);
-
-    if (!this.translationModel) {
-      this.translationModel = new TranslationModel(
-        this.vocabularySize,
-        this.hiddenSize,
-        this.vocabularySize
-      );
-    }
-
-    this.trainModel(sourceSentences, targetSentences);
-    this.displayTrainingResults();
   }
 
   handleClusterSentences() {
     console.log("Cluster Sentences feature not yet implemented");
-  }
-
-  handleTranslation() {
-    const input = document.getElementById("translationInput").value;
-    if (!input) {
-      this.modalManager.showModal("No Input", "Please enter text to translate");
-      return;
-    }
-
-    const translatedText = this.translationModel.translate(input);
-    document.getElementById("translationOutput").textContent = translatedText;
   }
 
   isTextCoherent(text) {
@@ -369,79 +343,5 @@ export class AnalysisMode {
     });
 
     // Add more event listeners for filtering or highlighting as needed
-  }
-
-  /** ===============================
-      =======Translation Model======= 
-      =============================== */
-  preprocessText(text) {
-    const sentences = text.split("\n").filter((s) => s.trim() !== "");
-    const midpoint = Math.floor(sentences.length / 2);
-    return [sentences.slice(0, midpoint), sentences.slice(midpoint)];
-  }
-
-  trainModel(sourceSentences, targetSentences) {
-    for (let i = 0; i < sourceSentences.length; i++) {
-      const sourceVector = this.sentenceToVector(sourceSentences[i]);
-      const targetVector = this.sentenceToVector(targetSentences[i]);
-      this.translationModel.train(sourceVector, targetVector);
-    }
-  }
-
-  sentenceToVector(sentence) {
-    const vector = new Array(this.vocabularySize).fill(0);
-    const words = sentence.toLowerCase().split(/\s+/);
-    words.forEach((word) => {
-      const index = this.hashWord(word);
-      vector[index]++;
-    });
-    return [vector];
-  }
-
-  hashWord(word) {
-    let hash = 0;
-    for (let i = 0; i < word.length; i++) {
-      hash = (hash << 5) - hash + word.charCodeAt(i);
-      hash = hash & hash;
-    }
-    return Math.abs(hash) % this.vocabularySize;
-  }
-
-  displayTrainingResults() {
-    let html = '<div class="translation-model__results">';
-    html += "<h3>Translation Model Trained</h3>";
-    html +=
-      "<p>The model has been trained on the provided text. You can now use it for simple translations.</p>";
-    html += '<div class="translation-model__input">';
-    html +=
-      '<textarea id="translationInput" placeholder="Enter text to translate..."></textarea>';
-    html += '<button id="translateButton">Translate</button>';
-    html += "</div>";
-    html += '<div id="translationOutput"></div>';
-    html += "</div>";
-
-    this.analysisResults.innerHTML = html;
-    this.addTranslationEventListener();
-  }
-
-  addTranslationEventListener() {
-    const translateButton = document.getElementById("translateButton");
-    translateButton.addEventListener("click", () => {
-      this.handleTranslation.bind(this);
-      const input = document.getElementById("translationInput").value;
-      const inputVector = this.sentenceToVector(input);
-      const outputVector = this.translationModel.predict(inputVector);
-      const translation = this.vectorToSentence(outputVector);
-      document.getElementById("translationOutput").textContent = translation;
-    });
-  }
-
-  vectorToSentence(vector) {
-    return vector
-      .map((value, index) => ({ value, index }))
-      .sort((a, b) => b.value - a.value)
-      .slice(0, 5)
-      .map((item) => `Word${item.index}`)
-      .join(" ");
   }
 }
