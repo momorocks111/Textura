@@ -4,6 +4,10 @@ import { ModalManager } from "../utils/modal_manager.js";
 import { TextTransformer } from "./text_transformer.js";
 import { KeywordAnalyzer } from "./keyword_analyzer.js";
 import { KeywordVisualizer } from "./keyword_visualizer.js";
+import { TextAnalyzer } from "./text_analyzer.js";
+import { WordEmbeddings } from "./word_embeddings.js";
+import { SimpleRNN } from "./simple_rnn.js";
+import { NeuralTextTransformer } from "./neural_text_transformer.js";
 
 export class AnalysisMode {
   constructor() {
@@ -20,6 +24,14 @@ export class AnalysisMode {
     this.textTransformer = new TextTransformer();
     this.keywordAnalyzer = new KeywordAnalyzer();
     this.keywordVisualizer = new KeywordVisualizer();
+    this.textAnalyzer = new TextAnalyzer();
+    this.wordEmbeddings = new WordEmbeddings();
+    this.rnn = new SimpleRNN(50, 100, 4); // Input size 50, hidden size 100, output size 4 (for 4 transformation types)
+    this.neuralTransformer = new NeuralTextTransformer(
+      this.textAnalyzer,
+      this.wordEmbeddings,
+      this.rnn
+    );
 
     // Utils
     this.modalManager = new ModalManager();
@@ -99,18 +111,41 @@ export class AnalysisMode {
     const text = this.textArea.value.trim();
 
     if (!text) {
-      this.modalManager.showModal(
-        "No Text",
-        "Please enter text for keyword suggestion"
-      );
+      this.modalManager.showModal("No Text", "Please enter text for analysis");
       return;
     }
 
     this.showLoadingScreen();
 
     setTimeout(() => {
-      this.hideLoadingScreen();
-      this.displayAnalysisResults(text);
+      try {
+        const words = this.textAnalyzer.tokenize(text);
+        console.log("Tokenized words:", words);
+
+        // Create embeddings for all words in the text
+        console.log("Text before createEmbeddings:", text);
+        this.wordEmbeddings.createEmbeddings(text);
+
+        const embeddings = words.map((word) => {
+          const emb = this.wordEmbeddings.getEmbedding(word);
+          console.log(`Embedding for "${word}":`, emb);
+          return emb;
+        });
+
+        console.log("All embeddings:", embeddings);
+
+        const rnnOutput = this.rnn.forward(embeddings);
+
+        this.hideLoadingScreen();
+        this.displayAnalysisResults(text);
+      } catch (error) {
+        this.hideLoadingScreen();
+        this.modalManager.showModal(
+          "Error",
+          `An error occurred: ${error.message}`
+        );
+        console.error(error);
+      }
     }, 3000);
   }
 
@@ -409,7 +444,18 @@ export class AnalysisMode {
     });
   }
 
-  handleTransfromation(transformType) {
-    console.log(`Transformation type: ${transformType}`);
+  handleTransformation(transformType) {
+    const originalText = document.querySelector(
+      ".neural-analysis__original-text p"
+    ).textContent;
+    const transformedText = this.neuralTransformer.transformText(
+      originalText,
+      transformType
+    );
+
+    document.querySelector(".neural-analysis__transformed-text").innerHTML = `
+      <h4>Transformed Text:</h4>
+      <p>${transformedText}</p>
+    `;
   }
 }
