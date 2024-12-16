@@ -1,5 +1,7 @@
 "use strict";
 
+import { toneWords } from "../archive/tone.js";
+
 export class NeuralTextTransformer {
   constructor(textAnalyzer, wordEmbeddings, rnn) {
     this.textAnalyzer = textAnalyzer;
@@ -45,15 +47,33 @@ export class NeuralTextTransformer {
   }
 
   changeToneWord(word, output) {
-    const tones = ["happy", "sad", "angry", "neutral"];
+    const tones = Object.keys(toneWords);
     const toneIndex = output.indexOf(Math.max(...output));
-    const toneSynonyms = {
-      happy: ["joyful", "elated", "cheerful"],
-      sad: ["gloomy", "melancholy", "sorrowful"],
-      angry: ["furious", "enraged", "irritated"],
-      neutral: ["indifferent", "impartial", "unbiased"],
-    };
-    return toneSynonyms[tones[toneIndex]][Math.floor(Math.random() * 3)];
+    const selectedTone = tones[toneIndex];
+
+    const lowercaseWord = word.toLowerCase();
+
+    // Check if the word is in any of the tone categories
+    for (const [tone, words] of Object.entries(toneWords)) {
+      if (words.includes(lowercaseWord)) {
+        // If it is, replace it with a word from the selected tone
+        // But if the current tone is the same as the selected tone, keep the original word
+        if (tone === selectedTone) {
+          return word;
+        }
+        const newWord =
+          toneWords[selectedTone][
+            Math.floor(Math.random() * toneWords[selectedTone].length)
+          ];
+        // Preserve the original capitalization
+        return word[0] === word[0].toUpperCase()
+          ? newWord.charAt(0).toUpperCase() + newWord.slice(1)
+          : newWord;
+      }
+    }
+
+    // If the word is not in our tone words, return it unchanged
+    return word;
   }
 
   changeSentimentWord(word, output) {

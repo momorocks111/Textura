@@ -439,7 +439,7 @@ export class AnalysisMode {
     buttons.forEach((button) => {
       button.addEventListener("click", (e) => {
         const transformType = e.target.dataset.transform;
-        this.handleTransfromation(transformType);
+        this.handleTransformation(transformType);
       });
     });
   }
@@ -448,13 +448,22 @@ export class AnalysisMode {
     const originalText = document.querySelector(
       ".neural-analysis__original-text p"
     ).textContent;
+
+    // Ensure the RNN and word embeddings are properly initialized
+    const words = this.textAnalyzer.tokenize(originalText);
+    this.wordEmbeddings.createEmbeddings(originalText);
+    const embeddings = words.map((word) =>
+      this.wordEmbeddings.getEmbedding(word)
+    );
+    this.rnn.forward(embeddings);
+
     const transformedText = this.neuralTransformer.transformText(
       originalText,
       transformType
     );
 
     document.querySelector(".neural-analysis__transformed-text").innerHTML = `
-      <h4>Transformed Text:</h4>
+      <h4>Transformed Text (${transformType}):</h4>
       <p>${transformedText}</p>
     `;
   }
