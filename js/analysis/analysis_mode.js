@@ -386,7 +386,7 @@ export class AnalysisMode {
     html +=
       '<button class="neural-analysis__button" data-transform="formality">Adjust Formality</button>';
     html +=
-      '<button class="neural-analysis__button" data-transform="genre">Transform Genre</button>';
+      '<button class="neural-analysis__button" data-transform="randomize">Randomize Text</button>';
     html += "</div>";
     html += '<div class="neural-analysis__original-text">';
     html += "<h4>Original Text:</h4>";
