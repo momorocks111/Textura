@@ -1,6 +1,6 @@
 "use strict";
 
-import { toneWords } from "../archive/tone.js";
+import { toneWords } from "../../archive/tone.js";
 
 export class NeuralTextTransformer {
   constructor(textAnalyzer, wordEmbeddings, rnn) {

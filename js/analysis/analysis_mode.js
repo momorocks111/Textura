@@ -5,9 +5,9 @@ import { TextTransformer } from "./text_transformer.js";
 import { KeywordAnalyzer } from "./keyword_analyzer.js";
 import { KeywordVisualizer } from "./keyword_visualizer.js";
 import { TextAnalyzer } from "./text_analyzer.js";
-import { WordEmbeddings } from "./word_embeddings.js";
-import { SimpleRNN } from "./simple_rnn.js";
-import { NeuralTextTransformer } from "./neural_text_transformer.js";
+import { WordEmbeddings } from "./model/word_embeddings.js";
+import { SimpleRNN } from "./model/ltsm.js";
+import { NeuralTextTransformer } from "./model/neural_text_transformer.js";
 
 export class AnalysisMode {
   constructor() {
@@ -120,19 +120,14 @@ export class AnalysisMode {
     setTimeout(() => {
       try {
         const words = this.textAnalyzer.tokenize(text);
-        console.log("Tokenized words:", words);
 
         // Create embeddings for all words in the text
-        console.log("Text before createEmbeddings:", text);
         this.wordEmbeddings.createEmbeddings(text);
 
         const embeddings = words.map((word) => {
           const emb = this.wordEmbeddings.getEmbedding(word);
-          console.log(`Embedding for "${word}":`, emb);
           return emb;
         });
-
-        console.log("All embeddings:", embeddings);
 
         const rnnOutput = this.rnn.forward(embeddings);
 

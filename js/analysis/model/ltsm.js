@@ -34,32 +34,6 @@ export class SimpleRNN {
     return outputs;
   }
 
-  //   multiply(a, b) {
-  //     if (Array.isArray(a) && Array.isArray(b[0])) {
-  //       console.log("a", a);
-  //       console.log("b", b[0]);
-  //       // Matrix multiplication
-  //       return a.map((row) => {
-  //         console.log(row);
-  //         b[0].map((_, i) =>
-  //           row.reduce((sum, cell, j) => sum + cell * b[j][i], 0)
-  //         );
-  //       });
-  //     } else if (Array.isArray(a) && Array.isArray(b)) {
-  //       // Vector-vector multiplication (dot product)
-  //       return a.reduce((sum, val, i) => sum + val * b[i], 0);
-  //     } else if (Array.isArray(a) && typeof b === "number") {
-  //       // Vector-scalar multiplication
-  //       return a.map((val) => val * b);
-  //     } else if (typeof a === "number" && Array.isArray(b)) {
-  //       // Scalar-vector multiplication
-  //       return b.map((val) => a * val);
-  //     } else {
-  //       // Scalar multiplication
-  //       return a * b;
-  //     }
-  //   }
-
   multiply(a, b) {
     if (Array.isArray(a) && Array.isArray(b[0])) {
       // Vector-matrix multiplication
